@@ -39,17 +39,25 @@ export default function FeaturedProjectsSection() {
         {projects.map((project) => (
           <div
             key={project.slug}
-            className="group flex flex-col rounded-xl bg-white/[0.03] p-6 transition-all duration-300 hover:bg-white/[0.06] hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)]"
+            role="button"
+            tabIndex={0}
+            onClick={() => setSelectedProject(project)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setSelectedProject(project);
+              }
+            }}
+            className="group flex cursor-pointer flex-col rounded-xl bg-white/[0.03] p-6 transition-all duration-300 hover:bg-white/[0.06] hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)]"
           >
             {/* Category + arrow */}
             <div className="flex items-center justify-between">
               <span className="font-mono text-xs tracking-wider text-accent">
                 {project.category}
               </span>
-              <button
-                onClick={() => setSelectedProject(project)}
+              <span
                 className="text-white/20 transition-colors duration-200 group-hover:text-accent"
-                aria-label={`View ${project.title}`}
+                aria-hidden="true"
               >
                 <svg
                   width="16"
@@ -64,7 +72,7 @@ export default function FeaturedProjectsSection() {
                   <line x1="7" y1="17" x2="17" y2="7" />
                   <polyline points="7 7 17 7 17 17" />
                 </svg>
-              </button>
+              </span>
             </div>
 
             {/* Title */}
@@ -116,17 +124,15 @@ export default function FeaturedProjectsSection() {
 
             {/* Action links */}
             <div className="mt-4 flex flex-wrap items-center gap-4 border-t border-white/[0.06] pt-4 font-mono text-xs tracking-wider">
-              <button
-                onClick={() => setSelectedProject(project)}
-                className="text-white/40 transition-colors duration-200 hover:text-accent"
-              >
+              <span className="text-white/40 transition-colors duration-200 group-hover:text-accent">
                 VIEW PROJECT &raquo;
-              </button>
+              </span>
               {project.codeUrl && (
                 <a
                   href={project.codeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
                   className="text-white/40 transition-colors duration-200 hover:text-accent"
                 >
                   CODE ↗
@@ -137,6 +143,7 @@ export default function FeaturedProjectsSection() {
                   href={project.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
                   className="text-white/40 transition-colors duration-200 hover:text-accent"
                 >
                   LIVE ↗

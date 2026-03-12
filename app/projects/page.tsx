@@ -38,13 +38,13 @@ export default function ProjectsPage() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="text-muted transition-colors group-hover:text-accent"
+                  className="text-white/20 transition-colors duration-200 group-hover:text-accent"
                 >
                   <line x1="7" y1="17" x2="17" y2="7" />
                   <polyline points="7 7 17 7 17 17" />
                 </svg>
               </div>
-              <h2 className="mt-3 font-mono text-base font-bold tracking-tight">
+              <h2 className="mt-3 font-mono text-base font-bold tracking-tight transition-colors duration-200 group-hover:text-accent">
                 {project.title.toUpperCase()}
               </h2>
               <p className="mt-3 text-sm text-muted">

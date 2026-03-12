@@ -5,6 +5,7 @@ import {
   education,
   achievements,
 } from "@/data/personal";
+import Image from "next/image";
 
 export default function AboutPage() {
   return (
@@ -49,9 +50,14 @@ export default function AboutPage() {
           </div>
           <div className="flex justify-center md:justify-end">
             <div className="h-52 w-52 overflow-hidden rounded-full bg-white/[0.04] md:h-64 md:w-64">
-              <div className="flex h-full w-full items-center justify-center font-mono text-3xl text-muted/50">
-                SA
-              </div>
+              <Image
+                src="/profile.jpg"
+                alt={personalInfo.name}
+                width={256}
+                height={256}
+                className="h-full w-full object-cover"
+                priority
+              />
             </div>
           </div>
         </div>
@@ -65,11 +71,13 @@ export default function AboutPage() {
               key={section.title}
               className="rounded-xl bg-white/[0.03] p-8 transition-all duration-200 hover:bg-white/[0.05]"
             >
-              <span className="text-xl text-accent">{section.icon}</span>
-              <h2 className="mt-3 font-mono text-sm font-bold tracking-[0.2em]">
-                {section.title}
-              </h2>
-              <p className="mt-3 font-mono text-sm leading-relaxed text-muted">
+              <div className="flex items-center gap-3">
+                <span className="text-xl text-accent">{section.icon}</span>
+                <h2 className="font-mono text-lg font-bold tracking-[0.1em]">
+                  {section.title}
+                </h2>
+              </div>
+              <p className="mt-4 text-sm leading-relaxed text-muted">
                 {section.description}
               </p>
             </div>
@@ -81,7 +89,7 @@ export default function AboutPage() {
       <section className="mx-auto mt-20 max-w-5xl px-6">
         <div className="flex items-center gap-2">
           <span className="text-accent">⊕</span>
-          <h2 className="font-mono text-sm font-bold tracking-[0.2em]">
+          <h2 className="font-mono text-lg font-bold tracking-[0.1em]">
             EXPERIENCE
           </h2>
         </div>
@@ -95,16 +103,17 @@ export default function AboutPage() {
                 </div>
                 <p className="font-mono text-xs text-muted">{exp.duration}</p>
               </div>
-              <div className="mt-3 space-y-2">
+              <ul className="mt-3 space-y-1.5">
                 {exp.points.map((point, i) => (
-                  <p
+                  <li
                     key={i}
-                    className="font-mono text-sm leading-relaxed text-foreground/70"
+                    className="flex gap-2 text-sm leading-relaxed text-foreground/70"
                   >
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent/50" />
                     {point}
-                  </p>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           ))}
         </div>
@@ -114,7 +123,7 @@ export default function AboutPage() {
       <section className="mx-auto mt-16 max-w-5xl px-6">
         <div className="flex items-center gap-2">
           <span className="text-accent">⊕</span>
-          <h2 className="font-mono text-sm font-bold tracking-[0.2em]">
+          <h2 className="font-mono text-lg font-bold tracking-[0.1em]">
             EDUCATION
           </h2>
         </div>
@@ -145,7 +154,7 @@ export default function AboutPage() {
       <section className="mx-auto mt-16 max-w-5xl px-6">
         <div className="flex items-center gap-2">
           <span className="text-accent">⊕</span>
-          <h2 className="font-mono text-sm font-bold tracking-[0.2em]">
+          <h2 className="font-mono text-lg font-bold tracking-[0.1em]">
             ACHIEVEMENTS
           </h2>
         </div>

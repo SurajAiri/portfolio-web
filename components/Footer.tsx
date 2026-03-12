@@ -2,15 +2,13 @@ import { personalInfo } from "@/data/personal";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/[0.04] py-16 text-center">
+    <footer className="border-t border-white/[0.04] py-12 text-center">
       <div className="mx-auto max-w-5xl px-6">
-        <h2 className="font-mono text-xl font-bold tracking-tight sm:text-2xl">
-          LET&apos;S BUILD SOMETHING IMPACTFUL
-        </h2>
-        <p className="mt-3 text-sm text-muted">
-          Email, resume, and LinkedIn are one click away.
+        <p className="font-mono text-xs tracking-[0.15em] text-white/30">
+          &copy; {new Date().getFullYear()} {personalInfo.name}. Built with
+          Next.js &amp; Tailwind.
         </p>
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 font-mono text-xs tracking-wider">
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-6 font-mono text-xs tracking-wider">
           <a
             href={`mailto:${personalInfo.email}`}
             className="text-white/40 transition-colors duration-200 hover:text-accent"

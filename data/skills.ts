@@ -3,7 +3,7 @@ import type { SkillCategory } from "@/types";
 export const skills: SkillCategory[] = [
   {
     name: "Languages",
-    items: ["Python", "C/C++", "SQL"],
+    items: ["Python", "TypeScript", "C/C++", "SQL"],
   },
   {
     name: "ML / DL",

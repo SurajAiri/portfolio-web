@@ -45,8 +45,9 @@ body::before {
   background-size: 256px 256px;
 }
 
-/* Content above noise */
-body > * {
+/* Content above noise — exclude <header> so Tailwind's fixed/z-50 isn't overridden */
+body > main,
+body > footer {
   position: relative;
   z-index: 1;
 }
