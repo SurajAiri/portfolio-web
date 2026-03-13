@@ -51,7 +51,7 @@ export default function AboutPage() {
           <div className="flex justify-center md:justify-end">
             <div className="h-52 w-52 overflow-hidden rounded-full bg-white/[0.04] md:h-64 md:w-64">
               <Image
-                src="/profile.jpg"
+                src="/profile.webp"
                 alt={personalInfo.name}
                 width={256}
                 height={256}
