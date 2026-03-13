@@ -3,6 +3,7 @@
 import type { Project } from "@/types";
 import Link from "next/link";
 import { useEffect } from "react";
+import { X, ArrowUpRight } from "lucide-react";
 
 interface ProjectDialogProps {
   project: Project;
@@ -39,19 +40,7 @@ export default function ProjectDialog({
           className="absolute top-4 right-4 text-white/30 hover:text-accent transition-colors duration-200"
           aria-label="Close dialog"
         >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
+          <X size={20} />
         </button>
 
         <span className="font-mono text-xs tracking-wider text-accent">
@@ -117,9 +106,9 @@ export default function ProjectDialog({
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-foreground/70 transition-colors hover:text-accent"
+              className="inline-flex items-center gap-1 text-foreground/70 transition-colors hover:text-accent"
             >
-              LIVE DEMO ↗
+              LIVE DEMO <ArrowUpRight size={12} />
             </a>
           )}
           {project.codeUrl && (
@@ -127,9 +116,9 @@ export default function ProjectDialog({
               href={project.codeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-foreground/70 transition-colors hover:text-accent"
+              className="inline-flex items-center gap-1 text-foreground/70 transition-colors hover:text-accent"
             >
-              CODE ↗
+              CODE <ArrowUpRight size={12} />
             </a>
           )}
         </div>

@@ -6,13 +6,49 @@ import {
   achievements,
 } from "@/data/personal";
 import Image from "next/image";
+import {
+  Terminal,
+  Cog,
+  Bot,
+  Briefcase,
+  GraduationCap,
+  Trophy,
+  Github,
+  Linkedin,
+} from "lucide-react";
+
+const sectionIcons: Record<string, React.ReactNode> = {
+  ">_": <Terminal size={20} />,
+  "⚙": <Cog size={20} />,
+  "🤖": <Bot size={20} />,
+};
 
 export default function AboutPage() {
+  function parseMarkdown(text: String) {
+    const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith("**") && part.endsWith("**")) {
+        return (
+          <strong key={i} className="text-white font-semibold">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      if (part.startsWith("*") && part.endsWith("*")) {
+        return (
+          <em key={i} className="italic">
+            {part.slice(1, -1)}
+          </em>
+        );
+      }
+      return part;
+    });
+  }
   return (
     <div className="pb-20">
       {/* Hero — same layout as home hero */}
       <section className="mx-auto max-w-5xl px-6 pt-28 pb-20 sm:pt-32">
-        <div className="grid items-start gap-10 md:grid-cols-[1fr_280px]">
+        <div className="grid items-center gap-10 md:grid-cols-[1fr_280px]">
           <div>
             <p className="font-mono text-xs font-semibold tracking-[0.2em] text-accent">
               ABOUT ME
@@ -20,7 +56,13 @@ export default function AboutPage() {
             <h1 className="mt-4 font-mono text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
               {personalInfo.name.toUpperCase()}
             </h1>
-            <p className="mt-2 text-base text-muted">{personalInfo.title}</p>
+            <p className="mt-2 flex items-center gap-1 text-base">
+              <span className="font-bold text-accent">
+                {personalInfo.primaryTitle}
+              </span>
+              <span className="text-white/30">+</span>
+              <span className="text-muted">{personalInfo.secondaryTitle}</span>
+            </p>
             <div className="mt-6 space-y-4 border-l-2 border-accent pl-5">
               {personalInfo.bio.map((paragraph, i) => (
                 <p
@@ -48,7 +90,7 @@ export default function AboutPage() {
               </a>
             </div>
           </div>
-          <div className="flex justify-center md:justify-end">
+          <div className="flex flex-col items-center gap-4 md:items-end">
             <div className="h-52 w-52 overflow-hidden rounded-full bg-white/[0.04] md:h-64 md:w-64">
               <Image
                 src="/profile.webp"
@@ -59,11 +101,32 @@ export default function AboutPage() {
                 priority
               />
             </div>
+            {/* Social icons */}
+            <div className="flex items-center gap-3">
+              <a
+                href={personalInfo.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full bg-white/[0.06] p-2.5 text-white/40 transition-all duration-200 hover:bg-accent/20 hover:text-accent"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={18} />
+              </a>
+              <a
+                href={personalInfo.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full bg-white/[0.06] p-2.5 text-white/40 transition-all duration-200 hover:bg-accent/20 hover:text-accent"
+                aria-label="GitHub"
+              >
+                <Github size={18} />
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* How I Work / Where I Add Value — stacked cards */}
+      {/* How I Work / Where I Add Value / AI Coding — stacked cards */}
       <section className="mx-auto max-w-5xl px-6">
         <div className="space-y-6">
           {aboutSections.map((section) => (
@@ -72,13 +135,15 @@ export default function AboutPage() {
               className="rounded-xl bg-white/[0.03] p-8 transition-all duration-200 hover:bg-white/[0.05]"
             >
               <div className="flex items-center gap-3">
-                <span className="text-xl text-accent">{section.icon}</span>
+                <span className="text-accent">
+                  {sectionIcons[section.icon] || section.icon}
+                </span>
                 <h2 className="font-mono text-lg font-bold tracking-[0.1em]">
                   {section.title}
                 </h2>
               </div>
-              <p className="mt-4 text-sm leading-relaxed text-muted">
-                {section.description}
+              <p className="mt-4 text-sm leading-relaxed text-muted whitespace-pre-line">
+                {parseMarkdown(section.description)}
               </p>
             </div>
           ))}
@@ -88,7 +153,9 @@ export default function AboutPage() {
       {/* Experience */}
       <section className="mx-auto mt-20 max-w-5xl px-6">
         <div className="flex items-center gap-2">
-          <span className="text-accent">⊕</span>
+          <span className="text-accent">
+            <Briefcase size={18} />
+          </span>
           <h2 className="font-mono text-lg font-bold tracking-[0.1em]">
             EXPERIENCE
           </h2>
@@ -122,7 +189,9 @@ export default function AboutPage() {
       {/* Education */}
       <section className="mx-auto mt-16 max-w-5xl px-6">
         <div className="flex items-center gap-2">
-          <span className="text-accent">⊕</span>
+          <span className="text-accent">
+            <GraduationCap size={18} />
+          </span>
           <h2 className="font-mono text-lg font-bold tracking-[0.1em]">
             EDUCATION
           </h2>
@@ -153,7 +222,9 @@ export default function AboutPage() {
       {/* Achievements */}
       <section className="mx-auto mt-16 max-w-5xl px-6">
         <div className="flex items-center gap-2">
-          <span className="text-accent">⊕</span>
+          <span className="text-accent">
+            <Trophy size={18} />
+          </span>
           <h2 className="font-mono text-lg font-bold tracking-[0.1em]">
             ACHIEVEMENTS
           </h2>

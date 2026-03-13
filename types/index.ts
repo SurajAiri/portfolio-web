@@ -1,11 +1,13 @@
 export interface PersonalInfo {
   name: string;
-  title: string;
+  primaryTitle: string;
+  secondaryTitle: string;
   headline: string;
   bio: string[];
   email: string;
   linkedin: string;
   github: string;
+  pypi?: string;
   resumePath: string;
 }
 

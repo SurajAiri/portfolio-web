@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Suraj Kiran Airi | AI Engineer + Backend",
+  title: "Suraj Kiran Airi | AI Engineer · Backend",
   description:
     "I build AI systems that solve real problems. AI Engineer and Backend Developer specializing in LLMs, voice AI, and production ML systems.",
 };

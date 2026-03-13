@@ -1,5 +1,6 @@
 import { projects } from "@/data/projects";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 export default function ProjectsPage() {
   return (
@@ -29,20 +30,10 @@ export default function ProjectsPage() {
                 <span className="font-mono text-xs tracking-wider text-accent">
                   {project.category}
                 </span>
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                <ArrowUpRight
+                  size={16}
                   className="text-white/20 transition-colors duration-200 group-hover:text-accent"
-                >
-                  <line x1="7" y1="17" x2="17" y2="7" />
-                  <polyline points="7 7 17 7 17 17" />
-                </svg>
+                />
               </div>
               <h2 className="mt-3 font-mono text-base font-bold tracking-tight transition-colors duration-200 group-hover:text-accent">
                 {project.title.toUpperCase()}

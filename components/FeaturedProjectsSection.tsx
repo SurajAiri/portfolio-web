@@ -5,6 +5,7 @@ import type { Project } from "@/types";
 import { useState } from "react";
 import Link from "next/link";
 import ProjectDialog from "./ProjectDialog";
+import { ArrowUpRight } from "lucide-react";
 
 export default function FeaturedProjectsSection() {
   const projects = getFeaturedProjects();
@@ -59,19 +60,7 @@ export default function FeaturedProjectsSection() {
                 className="text-white/20 transition-colors duration-200 group-hover:text-accent"
                 aria-hidden="true"
               >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="7" y1="17" x2="17" y2="7" />
-                  <polyline points="7 7 17 7 17 17" />
-                </svg>
+                <ArrowUpRight size={16} />
               </span>
             </div>
 
@@ -80,7 +69,7 @@ export default function FeaturedProjectsSection() {
               {project.title.toUpperCase()}
             </h3>
 
-            {/* Problem / Result / Tech */}
+            {/* Problem / Result */}
             <div className="mt-4 space-y-3 text-sm leading-relaxed">
               <p className="text-white/40">
                 <span className="font-semibold text-foreground/60">
@@ -94,10 +83,6 @@ export default function FeaturedProjectsSection() {
                 </span>
                 {project.result}
               </p>
-              {/* <p className="text-white/40">
-                <span className="font-semibold text-foreground/60">Tech: </span>
-                {project.techSummary}
-              </p> */}
             </div>
 
             {/* Description */}
@@ -133,9 +118,9 @@ export default function FeaturedProjectsSection() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="text-white/40 transition-colors duration-200 hover:text-accent"
+                  className="inline-flex items-center gap-1 text-white/40 transition-colors duration-200 hover:text-accent"
                 >
-                  CODE ↗
+                  CODE <ArrowUpRight size={12} />
                 </a>
               )}
               {project.liveUrl && (
@@ -144,9 +129,9 @@ export default function FeaturedProjectsSection() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="text-white/40 transition-colors duration-200 hover:text-accent"
+                  className="inline-flex items-center gap-1 text-white/40 transition-colors duration-200 hover:text-accent"
                 >
-                  LIVE ↗
+                  LIVE <ArrowUpRight size={12} />
                 </a>
               )}
             </div>

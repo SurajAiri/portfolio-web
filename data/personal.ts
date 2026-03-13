@@ -7,7 +7,8 @@ import type {
 
 export const personalInfo: PersonalInfo = {
   name: "Suraj Kiran Airi",
-  title: "AI Engineer + Backend",
+  primaryTitle: "AI Engineer",
+  secondaryTitle: "Backend",
   headline: "I BUILD AI SYSTEMS THAT SOLVE REAL PROBLEMS.",
   bio: [
     "I'm an engineer who turns complex AI ideas into working products — fast, reliable, and built for real use.",
@@ -17,6 +18,7 @@ export const personalInfo: PersonalInfo = {
   email: "surajairi.ml@gmail.com",
   linkedin: "https://linkedin.com/in/suraj-kiran-airi",
   github: "https://github.com/SurajAiri",
+  pypi: "https://pypi.org/user/imkas/",
   resumePath: "/resume.pdf",
 };
 
@@ -32,6 +34,12 @@ export const aboutSections: AboutSection[] = [
     title: "WHERE I ADD VALUE",
     description:
       "End-to-end AI system development, fast MVP building, backend reliability, and real-time processing pipelines. I use the stack that best fits the problem, not the other way around.",
+  },
+  {
+    icon: "🤖",
+    title: "HOW I USE AI FOR CODING",
+    description:
+      "**For frontend:** I primarily use AI, then refine with AI. If AI isn't doing what I want, I dig into the code myself.\n **For backend and AI systems:** I first plan the architecture, test feasibility and working of each module separately in isolation (this helps me refine and deeply understand even unfamiliar parts), understand everything, then write a working version myself. I use AI to refine and optimize my existing code so it gets even better. \nDepending on module complexity, I skip some steps but the core principle stays: *understand first, build, then let AI sharpen the result.*",
   },
 ];
 
