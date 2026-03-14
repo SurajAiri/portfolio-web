@@ -39,9 +39,10 @@ export interface Project {
   mediaUrls?: string[]; // images, gif, videos, or demos showcasing the project
   demoUrl?: string; // link to live demo or prototype
   codeUrl?: string; // link to GitHub repo or codebase
-  references?: { [key: string]: string }; // additional links like case studies, articles, or presentations
+  references?: { [key: string]: string }; // additional links like case studies, articles, or presentations (other than above mentioned code/demo)
   featured: boolean; // whether to feature this project on the homepage
   isArchived?: boolean; // whether the project is archived or no longer maintained
-  justFunProject?: boolean; // whether this project was built just for fun or learning, without a specific problem statement or impact goal
-  oldProjectId: string; // this project is refined version
+  justFunProject: boolean; // whether this project was built just for fun or learning, without a specific problem statement or impact goal
+  isMiniProject: boolean; // whether this is a smaller-scale project or prototype, not a full product
+  oldProjectId?: string; // this project is refined version (default undefined for new projects)
 }
