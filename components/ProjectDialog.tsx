@@ -1,5 +1,6 @@
 "use client";
 
+import { formatProjectTimeline } from "@/data/projects";
 import type { Project } from "@/types";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -43,14 +44,35 @@ export default function ProjectDialog({
           <X size={20} />
         </button>
 
-        <span className="font-mono text-xs tracking-wider text-accent">
-          {project.category}
-        </span>
+        <div className="flex flex-wrap items-center gap-1.5">
+          {project.category.map((item) => (
+            <span
+              key={item}
+              className="rounded-full border border-accent/40 bg-accent/10 px-2 py-0.5 font-mono text-[10px] tracking-wider text-accent"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
         <h2 className="mt-2 font-mono text-xl font-bold tracking-tight">
           {project.title.toUpperCase()}
         </h2>
 
+        <div className="mt-2 flex flex-wrap items-center gap-2 text-[10px] font-mono uppercase tracking-[0.14em] text-white/35">
+          <span>{formatProjectTimeline(project)}</span>
+          <span className="text-white/20">•</span>
+          <span>{project.productType.join(" / ")}</span>
+        </div>
+
         <div className="mt-6 space-y-5">
+          <div>
+            <h3 className="font-mono text-xs tracking-[0.2em] text-muted mb-1">
+              SNAPSHOT
+            </h3>
+            <p className="text-sm leading-relaxed text-foreground/80">
+              {project.projectSummary}
+            </p>
+          </div>
           <div>
             <h3 className="font-mono text-xs tracking-[0.2em] text-muted mb-1">
               PROBLEM
@@ -79,13 +101,29 @@ export default function ProjectDialog({
 
         <div className="mt-6">
           <h3 className="font-mono text-xs tracking-[0.2em] text-muted mb-2">
+            TAGS
+          </h3>
+          <div className="flex flex-wrap gap-1.5">
+            {project.tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded bg-white/6 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-white/50"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-6">
+          <h3 className="font-mono text-xs tracking-[0.2em] text-muted mb-2">
             TECH STACK
           </h3>
           <div className="flex flex-wrap gap-1.5">
             {project.techStack.map((tech) => (
               <span
                 key={tech}
-                className="rounded bg-white/[0.06] px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-white/50"
+                className="rounded bg-white/6 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-white/50"
               >
                 {tech}
               </span>
@@ -93,7 +131,7 @@ export default function ProjectDialog({
           </div>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-white/[0.06] pt-6 font-mono text-xs tracking-wider">
+        <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-white/6 pt-6 font-mono text-xs tracking-wider">
           <Link
             href={`/projects/${project.slug}`}
             className="text-foreground transition-colors hover:text-accent"
@@ -101,9 +139,9 @@ export default function ProjectDialog({
           >
             VIEW FULL PAGE &raquo;
           </Link>
-          {project.liveUrl && (
+          {project.demoUrl && (
             <a
-              href={project.liveUrl}
+              href={project.demoUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-foreground/70 transition-colors hover:text-accent"

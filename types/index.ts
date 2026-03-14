@@ -30,22 +30,9 @@ export interface Achievement {
   description: string;
 }
 
-export interface Project {
-  slug: string;
-  title: string;
-  category: string;
-  problem: string;
-  result: string;
-  techSummary: string;
-  description: string;
-  techStack: string[];
-  liveUrl?: string;
-  codeUrl?: string;
-  caseStudyUrl?: string;
-  featured: boolean;
-}
-
 export interface SkillCategory {
   name: string;
   items: string[];
 }
+
+export * from "./project.types";

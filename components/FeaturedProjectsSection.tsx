@@ -1,6 +1,6 @@
 "use client";
 
-import { getFeaturedProjects } from "@/data/projects";
+import { formatProjectTimeline, getFeaturedProjects } from "@/data/projects";
 import type { Project } from "@/types";
 import { useState } from "react";
 import Link from "next/link";
@@ -29,7 +29,7 @@ export default function FeaturedProjectsSection() {
         </div>
         <Link
           href="/projects"
-          className="rounded bg-white/[0.06] px-4 py-2 font-mono text-xs tracking-wider text-foreground/70 transition-all duration-200 hover:bg-accent/15 hover:text-accent"
+          className="rounded bg-white/6 px-4 py-2 font-mono text-xs tracking-wider text-foreground/70 transition-all duration-200 hover:bg-accent/15 hover:text-accent"
         >
           VIEW ALL PROJECTS
         </Link>
@@ -39,7 +39,7 @@ export default function FeaturedProjectsSection() {
       <div className="mt-12 grid gap-6 lg:grid-cols-3">
         {projects.map((project) => (
           <div
-            key={project.slug}
+            key={project.id}
             role="button"
             tabIndex={0}
             onClick={() => setSelectedProject(project)}
@@ -49,13 +49,20 @@ export default function FeaturedProjectsSection() {
                 setSelectedProject(project);
               }
             }}
-            className="group flex cursor-pointer flex-col rounded-xl bg-white/[0.03] p-6 transition-all duration-300 hover:bg-white/[0.06] hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)]"
+            className="group flex cursor-pointer flex-col rounded-xl bg-white/3 p-6 transition-all duration-300 hover:bg-white/6 hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)]"
           >
             {/* Category + arrow */}
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs tracking-wider text-accent">
-                {project.category}
-              </span>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center gap-1.5">
+                {project.category.map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-full border border-accent/40 bg-accent/10 px-2 py-0.5 font-mono text-[10px] tracking-wider text-accent"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
               <span
                 className="text-white/20 transition-colors duration-200 group-hover:text-accent"
                 aria-hidden="true"
@@ -68,6 +75,17 @@ export default function FeaturedProjectsSection() {
             <h3 className="mt-3 font-mono text-base font-bold tracking-tight transition-colors duration-200 group-hover:text-accent">
               {project.title.toUpperCase()}
             </h3>
+
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-[10px] font-mono uppercase tracking-[0.14em] text-white/35">
+              <span>{formatProjectTimeline(project)}</span>
+              <span className="text-white/20">•</span>
+              <span>{project.productType.join(" / ")}</span>
+            </div>
+
+            {/* Description */}
+            <p className="mt-4 text-sm leading-relaxed text-white/40 line-clamp-3">
+              {project.projectSummary}
+            </p>
 
             {/* Problem / Result */}
             <div className="mt-4 space-y-3 text-sm leading-relaxed">
@@ -85,30 +103,25 @@ export default function FeaturedProjectsSection() {
               </p>
             </div>
 
-            {/* Description */}
-            <p className="mt-4 text-sm leading-relaxed text-white/30 line-clamp-3">
-              {project.description}
-            </p>
-
             {/* Tech pills */}
             <div className="mt-auto pt-5 flex flex-wrap gap-1.5">
-              {project.techStack.slice(0, 5).map((tech) => (
+              {project.techStack.slice(0, 4).map((tag) => (
                 <span
-                  key={tech}
-                  className="rounded bg-white/[0.05] px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-white/40"
+                  key={tag}
+                  className="rounded bg-white/5 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-white/40"
                 >
-                  {tech}
+                  {tag}
                 </span>
               ))}
-              {project.techStack.length > 5 && (
-                <span className="rounded bg-white/[0.05] px-2 py-0.5 font-mono text-[10px] text-white/40">
-                  +{project.techStack.length - 5}
+              {project.techStack.length > 4 && (
+                <span className="rounded bg-white/5 px-2 py-0.5 font-mono text-[10px] text-white/40">
+                  +{project.techStack.length - 4}
                 </span>
               )}
             </div>
 
             {/* Action links */}
-            <div className="mt-4 flex flex-wrap items-center gap-4 border-t border-white/[0.06] pt-4 font-mono text-xs tracking-wider">
+            <div className="mt-4 flex flex-wrap items-center gap-4 border-t border-white/6 pt-4 font-mono text-xs tracking-wider">
               <span className="text-white/40 transition-colors duration-200 group-hover:text-accent">
                 VIEW PROJECT &raquo;
               </span>
@@ -123,9 +136,9 @@ export default function FeaturedProjectsSection() {
                   CODE <ArrowUpRight size={12} />
                 </a>
               )}
-              {project.liveUrl && (
+              {project.demoUrl && (
                 <a
-                  href={project.liveUrl}
+                  href={project.demoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}

@@ -1,4 +1,8 @@
-import { projects, getProjectBySlug } from "@/data/projects";
+import {
+  formatProjectTimeline,
+  projects,
+  getProjectBySlug,
+} from "@/data/projects";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
@@ -16,7 +20,7 @@ export async function generateMetadata({
   if (!project) return { title: "Project Not Found" };
   return {
     title: `${project.title} | Suraj Kiran Airi`,
-    description: project.result,
+    description: project.projectSummary,
   };
 }
 
@@ -40,15 +44,34 @@ export default async function ProjectDetailPage({
         </Link>
 
         <div className="mt-8">
-          <span className="font-mono text-xs tracking-wider text-accent">
-            {project.category}
-          </span>
+          <div className="flex flex-wrap items-center gap-1.5">
+            {project.category.map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-accent/40 bg-accent/10 px-2 py-0.5 font-mono text-[10px] tracking-wider text-accent"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
           <h1 className="mt-2 font-mono text-2xl font-bold tracking-tight sm:text-3xl">
             {project.title.toUpperCase()}
           </h1>
+          <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/35">
+            {formatProjectTimeline(project)} • {project.productType.join(" / ")}
+          </p>
         </div>
 
         <div className="mt-10 space-y-8">
+          <div>
+            <h2 className="font-mono text-xs tracking-[0.2em] text-muted mb-2">
+              SNAPSHOT
+            </h2>
+            <p className="text-sm leading-relaxed text-foreground/80">
+              {project.projectSummary}
+            </p>
+          </div>
+
           <div>
             <h2 className="font-mono text-xs tracking-[0.2em] text-muted mb-2">
               THE PROBLEM
@@ -75,7 +98,6 @@ export default async function ProjectDetailPage({
               {project.description}
             </p>
           </div>
-
           <div>
             <h2 className="font-mono text-xs tracking-[0.2em] text-muted mb-3">
               TECH STACK
@@ -84,19 +106,56 @@ export default async function ProjectDetailPage({
               {project.techStack.map((tech) => (
                 <span
                   key={tech}
-                  className="rounded bg-white/[0.06] px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-white/50"
+                  className="rounded bg-white/6 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-white/50"
                 >
                   {tech}
                 </span>
               ))}
             </div>
           </div>
+
+          <div>
+            <h2 className="font-mono text-xs tracking-[0.2em] text-muted mb-3">
+              TAGS
+            </h2>
+            <div className="flex flex-wrap gap-1.5">
+              {project.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded bg-white/6 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-white/50"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {project.references && Object.keys(project.references).length > 0 && (
+            <div>
+              <h2 className="font-mono text-xs tracking-[0.2em] text-muted mb-3">
+                REFERENCES
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(project.references).map(([name, href]) => (
+                  <a
+                    key={name}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded border border-white/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-white/60 transition-colors hover:border-accent/40 hover:text-accent"
+                  >
+                    {name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
-        <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-white/[0.06] pt-8 font-mono text-xs tracking-wider">
-          {project.liveUrl && (
+        <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-white/6 pt-8 font-mono text-xs tracking-wider">
+          {project.demoUrl && (
             <a
-              href={project.liveUrl}
+              href={project.demoUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="text-foreground transition-colors hover:text-accent"
