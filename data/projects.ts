@@ -2,6 +2,43 @@ import type { Project } from "@/types";
 
 export const projects: Project[] = [
   {
+    id: "zensho",
+    slug: "zensho",
+    title: "Zensho",
+    problem:
+      "Video editors spend countless hours manually removing bad takes, identifying silences, and painstakingly cutting out stutters or ramblings before they can even begin true creative refinement.",
+    result:
+      "Developed a high-performance, privacy-first desktop application that automates 'rough cut' generation. By intelligently slicing out bad takes and silences locally, it saves creators hours of manual work and outputs a professional standard OpenTimelineIO (.otio) timeline ready for DaVinci Resolve or Premiere Pro.",
+    projectSummary:
+      "Zensho is a privacy-first, AI-powered desktop video editor built with Electron, React, and a native Python/FastAPI backend. It automates tedious video rough cutting natively on the user's hardware using LLMs and sub-second transcription.",
+    description:
+      "Zensho is a professional-grade desktop application designed to bridge the gap between artificial intelligence and traditional video editing workflows. Using a robust dual-environment architecture, it features an Electron/React front-end powered by a high-performance Python/FastAPI native backend. Zensho utilizes Deepgram for hyper-fast audio transcription and LiteLLM as an intelligent universal router to analyze text and precisely slice silences, stutters, and rambling. Users can then review the AI's cutting decisions through an intuitive text-based interface: editing transcripts, splitting segments, and restoring trimmed clips effortlessly. The application strongly advocates for privacy with its 'Bring Your Own Keys' (BYOK) system, ensuring all media is kept locally as it interacts directly with foundation models. For seamless handoffs, it exports purely compliant .otio timelines strictly ready for industry-standard Non-Linear Editing (NLE) software.",
+    category: ["AI", "FULL STACK", "OTHER"], // Using OTHER for Desktop application
+    tags: [
+      "Electron",
+      "FastAPI",
+      "Deepgram SDK",
+      "LiteLLM",
+      "OpenTimelineIO",
+      "Tailwind CSS",
+      "Vite",
+    ],
+    techStack: ["TypeScript", "Python", "React", "Native Desktop IPC"],
+    productType: ["API", "CLI", "OTHER"], // OTHER encompasses the Desktop/Electron App category
+    timeline: {
+      startDate: "2026-03-18",
+      isCurrent: true,
+    },
+    mediaUrls: [],
+    demoUrl: undefined,
+    codeUrl: "https://github.com/SurajAiri/zensho",
+    featured: true,
+    isArchived: false,
+    justFunProject: false,
+    isMiniProject: false,
+    oldProjectId: "ai-video-editor-v1",
+  },
+  {
     id: "ai-video-editor-v1",
     slug: "ai-video-editor-v1",
     title: "AI Video Editor (V1)",
@@ -44,8 +81,7 @@ export const projects: Project[] = [
 
     timeline: {
       startDate: "2026-03-03",
-      // endDate: "2026-0∂3-12",
-      isCurrent: true,
+      endDate: "2026-04-01",
     },
 
     // Add when available:
@@ -57,9 +93,10 @@ export const projects: Project[] = [
         "https://www.linkedin.com/posts/suraj-kiran-airi_tired-of-manually-scrubbing-through-raw-activity-7438282318278135808-O9BF?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD7jajsBvwGEXi6yaYT2pjENoYaMZaY5_74",
     },
 
-    featured: true,
+    featured: false,
     justFunProject: false,
     isMiniProject: false,
+    isArchived: true,
   },
   {
     id: "merobot-ai-assistant",
