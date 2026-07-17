@@ -1,13 +1,6 @@
 import { personalInfo } from "@/data/personal";
 import Image from "next/image";
-import {
-  Mail,
-  FileText,
-  Github,
-  Package,
-  Linkedin,
-  LinkedinIcon,
-} from "lucide-react";
+import { Mail, FileText, Github, Package, Linkedin } from "lucide-react";
 
 export default function HeroSection() {
   return (
@@ -62,7 +55,7 @@ export default function HeroSection() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-6 py-2.5 font-mono text-xs font-semibold tracking-wider text-foreground/80 transition-all duration-200 hover:bg-accent/20 hover:text-accent"
             >
-              <LinkedinIcon size={14} />
+              <Linkedin size={14} />
               LINKEDIN
             </a>
           </div>
@@ -76,8 +69,9 @@ export default function HeroSection() {
               alt={personalInfo.name}
               width={256}
               height={256}
+              sizes="(max-width: 768px) 208px, 256px"
               className="h-full w-full object-cover"
-              priority
+              loading="eager"
             />
           </div>
           {/* Social icons */}
