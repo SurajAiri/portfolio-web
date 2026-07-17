@@ -5,8 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { personalInfo } from "@/data/personal";
 
-// TODO: replace with your real deployed domain.
-const siteUrl = "https://surajkairi.dev";
+const siteUrl = "https://www.surajairi.com.np";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
