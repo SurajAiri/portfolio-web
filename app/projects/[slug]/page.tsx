@@ -2,6 +2,7 @@ import {
   formatProjectTimeline,
   projects,
   getProjectBySlug,
+  getSortedProjectLinks,
 } from "@/data/projects";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -32,6 +33,9 @@ export default async function ProjectDetailPage({
   const { slug } = await params;
   const project = getProjectBySlug(slug);
   if (!project) notFound();
+
+  // Full page has room for everything; group by type-priority order.
+  const allLinks = getSortedProjectLinks(project);
 
   return (
     <div className="pb-20">
@@ -130,21 +134,21 @@ export default async function ProjectDetailPage({
             </div>
           </div>
 
-          {project.references && Object.keys(project.references).length > 0 && (
+          {allLinks.length > 0 && (
             <div>
               <h2 className="font-mono text-xs tracking-[0.2em] text-muted mb-3">
-                REFERENCES
+                LINKS
               </h2>
               <div className="flex flex-wrap gap-2">
-                {Object.entries(project.references).map(([name, href]) => (
+                {allLinks.map((link) => (
                   <a
-                    key={name}
-                    href={href}
+                    key={link.label}
+                    href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="rounded border border-white/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-white/60 transition-colors hover:border-accent/40 hover:text-accent"
                   >
-                    {name}
+                    {link.label}
                   </a>
                 ))}
               </div>
@@ -153,26 +157,17 @@ export default async function ProjectDetailPage({
         </div>
 
         <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-white/6 pt-8 font-mono text-xs tracking-wider">
-          {project.demoUrl && (
+          {allLinks.slice(0, 2).map((link) => (
             <a
-              href={project.demoUrl}
+              key={link.label}
+              href={link.url}
               target="_blank"
               rel="noopener noreferrer"
               className="text-foreground transition-colors hover:text-accent"
             >
-              LIVE DEMO ↗
+              {link.label} ↗
             </a>
-          )}
-          {project.codeUrl && (
-            <a
-              href={project.codeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-foreground transition-colors hover:text-accent"
-            >
-              CODE ↗
-            </a>
-          )}
+          ))}
         </div>
       </article>
     </div>

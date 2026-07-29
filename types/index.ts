@@ -9,6 +9,7 @@ export interface PersonalInfo {
   github: string;
   pypi?: string;
   resumePath: string;
+  otherLinks?: { label: string; url: string }[]; // additional labeled links (portfolio-wide, not project-specific)
 }
 
 export interface AboutSection {
@@ -36,3 +37,6 @@ export interface SkillCategory {
 }
 
 export * from "./project.types";
+export * from "./media.types";
+export * from "./link.types";
+export * from "./certificate.types";

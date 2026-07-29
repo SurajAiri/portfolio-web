@@ -1,4 +1,4 @@
-import type { Project } from "@/types";
+import { LINK_TYPE_PRIORITY, type Project } from "@/types";
 
 export const projects: Project[] = [
   {
@@ -29,9 +29,19 @@ export const projects: Project[] = [
       startDate: "2026-03-18",
       isCurrent: true,
     },
-    mediaUrls: [],
-    demoUrl: undefined,
-    codeUrl: "https://github.com/SurajAiri/zensho",
+    media: [],
+    links: [
+      {
+        label: "Live Demo",
+        url: "https://zensho.surajairi.com.np",
+        type: "demo",
+      },
+      {
+        label: "GitHub",
+        url: "https://github.com/SurajAiri/zensho",
+        type: "code",
+      },
+    ],
     featured: true,
     isArchived: false,
     justFunProject: false,
@@ -85,13 +95,14 @@ export const projects: Project[] = [
     },
 
     // Add when available:
-    // demoUrl: "",
-    // codeUrl: "",
-    // mediaUrls: [],
-    references: {
-      linkedin:
-        "https://www.linkedin.com/posts/suraj-kiran-airi_tired-of-manually-scrubbing-through-raw-activity-7438282318278135808-O9BF?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD7jajsBvwGEXi6yaYT2pjENoYaMZaY5_74",
-    },
+    // media: [],
+    links: [
+      {
+        label: "LinkedIn Post",
+        url: "https://www.linkedin.com/posts/suraj-kiran-airi_tired-of-manually-scrubbing-through-raw-activity-7438282318278135808-O9BF?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD7jajsBvwGEXi6yaYT2pjENoYaMZaY5_74",
+        type: "article",
+      },
+    ],
 
     featured: false,
     justFunProject: false,
@@ -142,7 +153,13 @@ export const projects: Project[] = [
       endDate: "2026-03-01",
       isCurrent: false,
     },
-    codeUrl: "https://github.com/surajairi/merobot",
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/surajairi/merobot",
+        type: "code",
+      },
+    ],
     featured: true,
     isArchived: false,
     justFunProject: false,
@@ -190,10 +207,13 @@ export const projects: Project[] = [
       isCurrent: true,
     },
 
-    codeUrl: "https://github.com/SurajAiri/ai-screenshot-organizer",
-    references: {
-      repository: "https://github.com/SurajAiri/ai-screenshot-organizer",
-    },
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/SurajAiri/ai-screenshot-organizer",
+        type: "code",
+      },
+    ],
     featured: false,
     justFunProject: true,
     isMiniProject: false,
@@ -248,16 +268,28 @@ export const projects: Project[] = [
       endDate: "2026-03-12",
     },
 
-    demoUrl: "https://pypi.org/project/ai-tools-executor/",
-    codeUrl: "https://github.com/SurajAiri/ai-tools-executor",
-    references: {
-      pypi: "https://pypi.org/project/ai-tools-executor/",
-      repository: "https://github.com/SurajAiri/ai-tools-executor",
-      architecture:
-        "https://github.com/SurajAiri/ai-tools-executor/blob/main/docs/architecture.md",
-      usageGuide:
-        "https://github.com/SurajAiri/ai-tools-executor/blob/main/docs/how-to-use.md",
-    },
+    links: [
+      {
+        label: "PyPI",
+        url: "https://pypi.org/project/ai-tools-executor/",
+        type: "demo",
+      },
+      {
+        label: "GitHub",
+        url: "https://github.com/SurajAiri/ai-tools-executor",
+        type: "code",
+      },
+      {
+        label: "Architecture Docs",
+        url: "https://github.com/SurajAiri/ai-tools-executor/blob/main/docs/architecture.md",
+        type: "docs",
+      },
+      {
+        label: "Usage Guide",
+        url: "https://github.com/SurajAiri/ai-tools-executor/blob/main/docs/how-to-use.md",
+        type: "docs",
+      },
+    ],
 
     featured: true,
     isArchived: false,
@@ -301,10 +333,18 @@ export const projects: Project[] = [
       isCurrent: false,
     },
 
-    codeUrl: "https://github.com/surajairi/visualkit",
-    references: {
-      pypi: "https://pypi.org/project/visualkit/",
-    },
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/surajairi/visualkit",
+        type: "code",
+      },
+      {
+        label: "PyPI",
+        url: "https://pypi.org/project/visualkit/",
+        type: "demo",
+      },
+    ],
 
     featured: false,
     isArchived: false,
@@ -355,10 +395,18 @@ export const projects: Project[] = [
       endDate: "2026-03-10",
       isCurrent: false,
     },
-    codeUrl: "https://github.com/SurajAiri/openalert-flutter",
-    references: {
-      backendRepository: "https://github.com/SurajAiri/OpenAlertBackend",
-    },
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/SurajAiri/openalert-flutter",
+        type: "code",
+      },
+      {
+        label: "Backend Repository",
+        url: "https://github.com/SurajAiri/OpenAlertBackend",
+        type: "code",
+      },
+    ],
     featured: false,
     isArchived: true,
     justFunProject: false,
@@ -392,10 +440,13 @@ export const projects: Project[] = [
       startDate: "2025-11-01",
       endDate: "2026-01-15",
     },
-    codeUrl: "https://github.com/SurajAiri/roxy-ai-assistant",
-    references: {
-      architecture: "https://github.com/SurajAiri/roxy-ai-assistant",
-    },
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/SurajAiri/roxy-ai-assistant",
+        type: "code",
+      },
+    ],
     featured: false,
     justFunProject: true,
     isMiniProject: true,
@@ -427,10 +478,13 @@ export const projects: Project[] = [
       startDate: "2025-05-01",
       endDate: "2025-08-20",
     },
-    demoUrl: "https://mystorystream.netlify.app/",
-    references: {
-      product: "https://mystorystream.netlify.app/",
-    },
+    links: [
+      {
+        label: "Live Demo",
+        url: "https://mystorystream.netlify.app/",
+        type: "demo",
+      },
+    ],
     featured: false,
     justFunProject: false,
     isMiniProject: false,
@@ -470,10 +524,13 @@ export const projects: Project[] = [
       startDate: "2024-12-01",
       endDate: "2025-03-15",
     },
-    demoUrl: "https://www.orateme.com",
-    references: {
-      website: "https://www.orateme.com",
-    },
+    links: [
+      {
+        label: "Live Site",
+        url: "https://www.orateme.com",
+        type: "demo",
+      },
+    ],
     featured: false,
     justFunProject: false,
     isMiniProject: false,
@@ -506,4 +563,34 @@ export function formatProjectTimeline(project: Project): string {
   }
 
   return `${start} - ${formatMonthYear(endDate)}`;
+}
+
+// Sorts a project's links by type priority, then by optional manual `order`
+// as a tie-breaker within the same type.
+export function getSortedProjectLinks(project: Project) {
+  const links = project.links ?? [];
+  return [...links].sort((a, b) => {
+    const priorityDiff =
+      LINK_TYPE_PRIORITY[a.type] - LINK_TYPE_PRIORITY[b.type];
+    if (priorityDiff !== 0) return priorityDiff;
+    return (a.order ?? 0) - (b.order ?? 0);
+  });
+}
+
+// Sorts a project's media items by explicit `order`.
+export function getSortedProjectMedia(project: Project) {
+  return [...(project.media ?? [])].sort((a, b) => a.order - b.order);
+}
+
+// Walks the `oldProjectId` chain to find the project that replaced this one
+// (if any), so UI can show "Superseded by X" banners.
+export function getSupersedingProject(project: Project) {
+  return projects.find((p) => p.oldProjectId === project.id);
+}
+
+// Looks up the project this one replaces (if any), so UI can show
+// "Rebuilt version of X" banners.
+export function getSupersededProject(project: Project) {
+  if (!project.oldProjectId) return undefined;
+  return projects.find((p) => p.id === project.oldProjectId);
 }

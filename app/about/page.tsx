@@ -24,7 +24,7 @@ const sectionIcons: Record<string, React.ReactNode> = {
 };
 
 export default function AboutPage() {
-  function parseMarkdown(text: String) {
+  function parseMarkdown(text: string) {
     const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
     return parts.map((part, i) => {
       if (part.startsWith("**") && part.endsWith("**")) {

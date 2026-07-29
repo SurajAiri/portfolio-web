@@ -1,8 +1,11 @@
-import { formatProjectTimeline } from "@/data/projects";
+import { formatProjectTimeline, getSortedProjectLinks } from "@/data/projects";
 import type { Project } from "@/types";
 import { ArrowUpRight } from "lucide-react";
 
 export default function ProjectCard({ project }: { project: Project }) {
+  // Card is compact — show only the top 2 links by type priority
+  // (demo > code > docs > case-study > article > other).
+  const topLinks = getSortedProjectLinks(project).slice(0, 2);
   return (
     <div
       data-project-slug={project.slug}
@@ -80,26 +83,17 @@ export default function ProjectCard({ project }: { project: Project }) {
         <span className="text-white/40 transition-colors duration-200 group-hover:text-accent">
           VIEW PROJECT &raquo;
         </span>
-        {project.codeUrl && (
+        {topLinks.map((link) => (
           <a
-            href={project.codeUrl}
+            key={link.label}
+            href={link.url}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-white/40 transition-colors duration-200 hover:text-accent"
           >
-            CODE <ArrowUpRight size={12} />
+            {link.label.toUpperCase()} <ArrowUpRight size={12} />
           </a>
-        )}
-        {project.demoUrl && (
-          <a
-            href={project.demoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-white/40 transition-colors duration-200 hover:text-accent"
-          >
-            LIVE <ArrowUpRight size={12} />
-          </a>
-        )}
+        ))}
       </div>
     </div>
   );

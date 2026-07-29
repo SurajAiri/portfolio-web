@@ -1,6 +1,9 @@
 "use client";
 
-import { formatProjectTimeline } from "@/data/projects";
+import {
+  formatProjectTimeline,
+  getSortedProjectLinks,
+} from "@/data/projects";
 import type { Project } from "@/types";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -15,6 +18,8 @@ export default function ProjectDialog({
   project,
   onClose,
 }: ProjectDialogProps) {
+  // Dialog has more room than the card — show up to 4 links.
+  const topLinks = getSortedProjectLinks(project).slice(0, 4);
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -139,26 +144,17 @@ export default function ProjectDialog({
           >
             VIEW FULL PAGE &raquo;
           </Link>
-          {project.demoUrl && (
+          {topLinks.map((link) => (
             <a
-              href={project.demoUrl}
+              key={link.label}
+              href={link.url}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-foreground/70 transition-colors hover:text-accent"
             >
-              LIVE DEMO <ArrowUpRight size={12} />
+              {link.label.toUpperCase()} <ArrowUpRight size={12} />
             </a>
-          )}
-          {project.codeUrl && (
-            <a
-              href={project.codeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-foreground/70 transition-colors hover:text-accent"
-            >
-              CODE <ArrowUpRight size={12} />
-            </a>
-          )}
+          ))}
         </div>
       </div>
     </div>
