@@ -2,51 +2,64 @@ import { LINK_TYPE_PRIORITY, type Project } from "@/types";
 
 export const projects: Project[] = [
   {
-    id: "zensho",
+    id: "zensho-ai-video-editor",
     slug: "zensho",
-    title: "Zensho",
+    title: "Zensho - AI-Powered Desktop Video Editor",
     problem:
-      "Video editors spend countless hours manually removing bad takes, identifying silences, and painstakingly cutting out stutters or ramblings before they can even begin true creative refinement.",
+      "Turning raw screencast or facecam footage into a usable rough cut means manually scrubbing through hours of audio to cut stutters, dead air, and rambling takes — tedious work that delays the creative editing that actually matters, and most AI editing tools lock footage into a cloud pipeline or a proprietary subscription instead of a professional NLE workflow.",
     result:
-      "Developed a high-performance, privacy-first desktop application that automates 'rough cut' generation. By intelligently slicing out bad takes and silences locally, it saves creators hours of manual work and outputs a professional standard OpenTimelineIO (.otio) timeline ready for DaVinci Resolve or Premiere Pro.",
+      "Built a full desktop application that transcribes footage, uses an LLM to make AI-driven keep/cut decisions, and exports either directly or as a fully editable OpenTimelineIO timeline for DaVinci Resolve — with a custom LCS-based text-to-timestamp aligner and waveform-aware boundary snapping so cuts land on natural pauses rather than mid-word or mid-syllable.",
     projectSummary:
-      "Zensho is a privacy-first, AI-powered desktop video editor built with Electron, React, and a native Python/FastAPI backend. It automates tedious video rough cutting natively on the user's hardware using LLMs and sub-second transcription.",
+      "A privacy-first, BYOK desktop video editor (Electron + Python/FastAPI) that auto-generates AI rough cuts from screencasts via Deepgram transcription and LLM-driven editorial decisions, then exports non-destructively to DaVinci Resolve via OpenTimelineIO.",
     description:
-      "Zensho is a professional-grade desktop application designed to bridge the gap between artificial intelligence and traditional video editing workflows. Using a robust dual-environment architecture, it features an Electron/React front-end powered by a high-performance Python/FastAPI native backend. Zensho utilizes Deepgram for hyper-fast audio transcription and LiteLLM as an intelligent universal router to analyze text and precisely slice silences, stutters, and rambling. Users can then review the AI's cutting decisions through an intuitive text-based interface: editing transcripts, splitting segments, and restoring trimmed clips effortlessly. The application strongly advocates for privacy with its 'Bring Your Own Keys' (BYOK) system, ensuring all media is kept locally as it interacts directly with foundation models. For seamless handoffs, it exports purely compliant .otio timelines strictly ready for industry-standard Non-Linear Editing (NLE) software.",
-    category: ["AI", "FULL STACK", "OTHER"], // Using OTHER for Desktop application
+      "Zensho is a hybrid desktop application: an Electron/React/Vite frontend drives a locally-spawned Python FastAPI backend over HTTP (bound to 127.0.0.1 for local-only traffic), chosen specifically so CPU/IO-heavy ffmpeg and transcription work never blocks the UI thread. The processing pipeline runs each video through ffmpeg audio extraction, Deepgram Nova-3 word-level transcription, and an LLM rough-cut pass (via LiteLLM, so any OpenAI-compatible or BYOK provider can be swapped in) that decides what to keep, cut, or treat as silence.\n\nKey technical achievements include:\n- Custom LCS-based transcript aligner: the LLM returns only the words worth keeping, and a hand-written Longest-Common-Subsequence dynamic-programming aligner maps that refined script back onto the original word-level timestamps, with 'last-occurrence-wins' tie-breaking so repeated takes resolve to the correct (latest) occurrence, and a minimum-LCS-ratio fallback that preserves all content rather than silently discarding it if the LLM paraphrases instead of cutting.\n- Waveform-aware boundary snapping: a separate preprocessor snaps every cut point to the nearest word boundary and then refines further by extracting a PCM window via ffmpeg and finding the minimum-RMS-energy point, so cuts fall in natural pauses instead of mid-syllable — with a repair pass that clamps overlaps and removes now-redundant silence segments between adjacent kept clips.\n- Serialized async processing queue: a singleton `asyncio.Queue` worker processes one video at a time through a `QUEUED → PREPROCESSING → TRANSCRIBING → ROUGH_CUTTING → COMPLETED` state machine, preventing concurrent ffmpeg instances and LLM rate-limit bans while the UI polls a `/status` endpoint for live progress.\n- Non-destructive DaVinci Resolve export: an OpenTimelineIO exporter builds a multi-FPS-safe `.otio` timeline (plus FCP XML) from the same 'resolved timeline' used for the in-app preview player and MP4 export, linking video/audio clips via matching reel metadata so Resolve treats them as synced pairs — letting editors drag the AI's decisions straight into a professional NLE with every cut still editable.\n- Human-in-the-loop editing model: AI-generated cuts (`rough_cut_ai`) are never overwritten — user edits are stored as a separate `rough_cut_human` layer, with all exporters resolving `rough_cut_human ?? rough_cut_ai` per video, so some clips in a project can carry human edits while others still use the raw AI cut.\n- Dual interface: the same backend core is exposed both through the Electron desktop app and a standalone CLI (`run`, `process`, `export`, `status`, `config`) for scripted or headless use.",
+    category: ["AI", "FULL STACK"],
     tags: [
       "Electron",
       "FastAPI",
+      "LLM Integration",
+      "LiteLLM",
+      "Deepgram",
+      "OpenTimelineIO",
+      "LCS Sequence Alignment",
+      "Waveform Analysis",
+      "Async Processing Queue",
+      "IPC Context Bridge",
+      "BYOK",
+      "ffmpeg",
+      "Pydantic",
+      "State Machine Design",
+    ],
+    techStack: [
+      "TypeScript",
+      "React",
+      "Vite",
+      "Electron",
+      "Tailwind CSS",
+      "Python 3.12+",
+      "FastAPI",
+      "Uvicorn",
+      "Pydantic",
+      "asyncio",
       "Deepgram SDK",
       "LiteLLM",
       "OpenTimelineIO",
-      "Tailwind CSS",
-      "Vite",
+      "ffmpeg",
+      "loguru",
     ],
-    techStack: ["TypeScript", "Python", "React", "Native Desktop IPC"],
-    productType: ["API", "CLI", "OTHER"], // OTHER encompasses the Desktop/Electron App category
-    timeline: {
-      startDate: "2026-03-18",
-      isCurrent: true,
-    },
-    media: [],
+    productType: ["WEB APP", "CLI"], // Desktop (Electron) app — using WEB APP since ProductType has no Desktop option, plus a standalone CLI
+    timeline: { startDate: "2026-02-10", isCurrent: true }, // estimated — see note below
     links: [
       {
-        label: "Live Demo",
-        url: "https://zensho.surajairi.com.np",
-        type: "demo",
-      },
-      {
         label: "GitHub",
-        url: "https://github.com/SurajAiri/zensho",
+        url: "https://github.com/surajairi/zensho",
         type: "code",
       },
     ],
-    featured: true,
+    featured: false,
     isArchived: false,
     justFunProject: false,
     isMiniProject: false,
-    oldProjectId: "ai-video-editor-v1",
   },
   {
     id: "ai-video-editor-v1",
@@ -109,6 +122,73 @@ export const projects: Project[] = [
     isMiniProject: false,
     isArchived: true,
   },
+  {
+    id: "sherlock-candidate-identifier",
+    slug: "sherlock-candidate-identifier",
+    title: "Sherlock — Real-Time Candidate Identifier",
+    problem:
+      "Modern hiring platforms can't verify that the person on screen during a video interview is actually the invited candidate — they may join under a pseudonym, a device name, or a mismatched display name. A one-shot name match is trivially defeated; the system needs to reason continuously as new signals arrive throughout the call.",
+    result:
+      "Built a complete three-service system (simulator, Next.js dashboard, Python inference engine) that runs 9 independent signal extractors in parallel — 7 rule-based and 2 LLM-backed — and maintains a live Bayesian belief over candidate identity, surfacing a real-time verdict with confidence and a per-signal reasoning trail on the dashboard.",
+    projectSummary:
+      "A real-time AI identification system that watches a simulated multi-participant video call and determines which participant is the actual interview candidate, using a Bayesian belief engine with log-odds accumulation, per-identifier exponential decay, and a 5-state detection state machine — all streamed live to a Next.js dashboard over WebSocket.",
+    description:
+      "Sherlock treats candidate identification as a continuous probabilistic inference problem rather than a name lookup. The system is split into three services that communicate over WebSocket: a Python scenario simulator, a Next.js relay dashboard, and a Python FastAPI belief engine.\n\nKey technical achievements include:\n- **Belief Engine**: Maintains two independent log-odds tracks per participant — `logit_candidate` (converted via softmax across all participants, so probabilities are zero-sum) and `logit_not_candidate` (converted via per-participant sigmoid, allowing multiple people to simultaneously be eliminated) — updated on every incoming event.\n- **Per-Identifier Decay**: Each identifier's contribution is stored as its own bucket with a configurable `decay_half_life`. Decayed values are summed lazily at read time (`raw * 0.5^(elapsed / half_life)`) so stale evidence fades without a background timer.\n- **9 Pluggable Identifiers**: `name_match`, `email_identity`, `host_organizer` (rule-based, one-time); `speaking_share`, `qa_pattern`, `screenshare_heuristic`, `silent_observer` (rule-based, continuous); `llm_name_role` and `llm_transcript_role` (LLM-backed via LiteLLM, fail-open — the engine stays fully functional if the LLM provider is unreachable).\n- **DAG-Ordered Processor Registry**: Identifiers are registered in a dependency DAG (Kahn's algorithm); downstream processors are guaranteed to run only after their dependencies have produced output into a shared Feature Cache.\n- **5-State Detection Machine**: `exploring → searching → likely_candidate → stable_candidate → lost_candidate`, with a warmup gate (≥ 20 s elapsed + ≥ 3 evidence pieces) to prevent premature mis-identification, and hysteresis (separate entry/exit thresholds + a streak requirement) to prevent flapping.\n- **Scenario Simulator**: Compiles YAML scenario files into a timed event stream (`participant_join`, `transcript_segment`, `screenshare_start`, etc.) over WebSocket at configurable playback speed; includes 9 authored scenarios covering edge cases like mid-call renames, silent observer farms, and webcam-off sessions.\n- **Next.js Dashboard**: Relays the event stream to the engine, displays live transcript, participant tiles, and an engine panel with real-time confidence scores and per-identifier reasoning lines; uses Zustand for session state and Zod for wire-format validation.",
+    category: ["AI", "FULL STACK"],
+    tags: [
+      "Bayesian Inference",
+      "Log-Odds Accumulation",
+      "Exponential Decay",
+      "Softmax",
+      "WebSocket",
+      "Event-Driven Architecture",
+      "DAG Dependency Ordering",
+      "State Machine",
+      "LLM Integration",
+      "Pluggable Identifiers",
+      "Scenario Simulation",
+      "YAML Scenario Authoring",
+      "Zod Schema Validation",
+      "Zustand",
+      "Server-Sent Events",
+    ],
+    techStack: [
+      "Python 3.12+",
+      "FastAPI",
+      "LiteLLM",
+      "uvicorn",
+      "websockets",
+      "pydantic",
+      "pyyaml",
+      "Next.js 16",
+      "React 19",
+      "TypeScript",
+      "Tailwind CSS v4",
+      "Zustand",
+      "Zod",
+      "shadcn/ui",
+      "Turborepo",
+      "pnpm",
+    ],
+    productType: ["WEB APP", "API"],
+    timeline: {
+      startDate: "2026-07-11",
+      endDate: "2026-07-19",
+      isCurrent: false,
+    },
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/SurajAiri/challenge-sherlocks-ai-identify-candidate",
+        type: "code",
+      },
+    ],
+    featured: false,
+    isArchived: false,
+    justFunProject: false,
+    isMiniProject: false,
+  },
+
   {
     id: "merobot-ai-assistant",
     slug: "merobot",
