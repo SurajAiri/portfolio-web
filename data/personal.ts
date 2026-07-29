@@ -45,6 +45,16 @@ export const aboutSections: AboutSection[] = [
 
 export const experience: Experience[] = [
   {
+    role: "Freelance GenAI",
+    company: "Self-employed",
+    duration: "March 2025 – Present",
+    location: "Remote",
+    points: [
+      "Automated end-to-end lead generation using n8n and Vapi for US based client, replacing manual prospecting with scraping, qualification, and AI-driven outbound voice workflows.",
+      "Deployed a RAG-powered assistant that automated routine course and enrollment queries, reducing manual support workload for institute staff.",
+    ],
+  },
+  {
     role: "Flutter Developer Intern",
     company: "YoursThatSenior & SN Silos",
     duration: "Jul 2023 – Sept 2024",
@@ -61,7 +71,7 @@ export const education = {
   university: "Chandigarh University",
   location: "Mohali, India",
   duration: "Aug 2022 – July 2026",
-  cgpa: "8.67",
+  cgpa: "8.65",
   coursework: "Machine Learning, Deep Learning, Generative AI, AI, DSA",
 };
 

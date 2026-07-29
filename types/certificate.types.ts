@@ -14,4 +14,5 @@ export interface Certificate {
 
   order?: number; // manual override for scroll-strip order; defaults to date desc if omitted
   featured?: boolean; // pin to the front of the strip even without a manual order
+  type: "specialized" | "single"; // type of certificate, defaults to "single"
 }

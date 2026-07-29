@@ -18,7 +18,21 @@ import type { Certificate } from "@/types";
 //   featured: true,
 // },
 
-export const certificates: Certificate[] = [];
+export const certificates: Certificate[] = [
+  {
+    id: "ibm-genai-engineer",
+    title: "IBM Generative AI Engineer",
+    issuer: "Coursera / IBM",
+    date: "2025-06-25",
+    previewImageUrl: "public/certificates/ibm-genai-engg/preview.webp",
+    pdfUrl: "public/certificates/ibm-genai-engg/cert.pdf",
+    credentialUrl: "https://coursera.org/verify/professional-cert/M4MLAG8W3N80",
+    skills: ["Generative AI", "Prompt Engineering", "AI System Design"],
+    order: 1,
+    featured: true,
+    type: "specialized",
+  },
+];
 
 export function getSortedCertificates(): Certificate[] {
   return [...certificates].sort((a, b) => {
