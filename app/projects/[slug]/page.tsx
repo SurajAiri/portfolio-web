@@ -8,6 +8,7 @@ import {
 import { notFound } from "next/navigation";
 import ProjectBackNav from "@/components/ProjectBackNav";
 import ProjectGallery from "@/components/ProjectGallery";
+import ProjectMarkdown from "@/components/ProjectMarkdown";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -95,9 +96,7 @@ export default async function ProjectDetailPage({
             <h2 className="font-mono text-xs tracking-[0.2em] text-muted mb-2">
               HOW IT WORKS
             </h2>
-            <p className="text-sm leading-relaxed text-foreground/80">
-              {project.description}
-            </p>
+            <ProjectMarkdown content={project.description} />
           </div>
           <div>
             <h2 className="font-mono text-xs tracking-[0.2em] text-muted mb-3">
