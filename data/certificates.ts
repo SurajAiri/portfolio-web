@@ -16,7 +16,13 @@ import type { Certificate } from "@/types";
 //     "Feature engineering and data pipelines",
 //   ],
 //   featured: true,
+//   showOnHome: true,   // include in the home page strip
+//   showOnAbout: true,  // include in the About page section
 // },
+//
+// Certificates always show in full on the dedicated /certificates page,
+// ordered by `order` (falls back to most-recent-date). Set showOnHome /
+// showOnAbout to hand-pick the smaller subset shown on those pages.
 
 export const certificates: Certificate[] = [
   {
@@ -30,6 +36,8 @@ export const certificates: Certificate[] = [
     order: 1,
     featured: true,
     type: "specialized",
+    showOnHome: true,
+    showOnAbout: true,
   },
 ];
 
@@ -42,4 +50,14 @@ export function getSortedCertificates(): Certificate[] {
     }
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
+}
+
+// Hand-picked subset for the home page strip.
+export function getHomeCertificates(): Certificate[] {
+  return getSortedCertificates().filter((c) => c.showOnHome);
+}
+
+// Hand-picked subset for the About page section.
+export function getAboutCertificates(): Certificate[] {
+  return getSortedCertificates().filter((c) => c.showOnAbout);
 }

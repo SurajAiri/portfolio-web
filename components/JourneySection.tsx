@@ -108,7 +108,7 @@ export default function JourneySection() {
           className="absolute left-4 top-0 bottom-0 w-px origin-top bg-accent/60 md:left-1/2 md:-translate-x-1/2"
         />
 
-        <div className="space-y-7 md:space-y-9">
+        <div className="space-y-5 md:space-y-6">
           {mainEntries.map((entry, i) => (
             <JourneyEntry key={`${entry.period}-${entry.title}`} entry={entry} index={i} />
           ))}
@@ -117,7 +117,7 @@ export default function JourneySection() {
         {/* Dotted divider doubles as the collapse toggle for everything
             after it — collapsed by default so the section stays short. */}
         {dividerLabel && (
-          <div className="relative z-10 mt-7 md:mt-9">
+          <div className="relative z-10 mt-5 md:mt-6">
             <button
               type="button"
               onClick={() => setShowEarlier((v) => !v)}

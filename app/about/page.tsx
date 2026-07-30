@@ -5,6 +5,7 @@ import {
   education,
   achievements,
 } from "@/data/personal";
+import { getAboutCertificates } from "@/data/certificates";
 import JourneySection from "@/components/JourneySection";
 import CertificatesSection from "@/components/CertificatesSection";
 import Image from "next/image";
@@ -26,6 +27,8 @@ const sectionIcons: Record<string, React.ReactNode> = {
 };
 
 export default function AboutPage() {
+  const aboutCertificates = getAboutCertificates();
+
   function parseMarkdown(text: string) {
     const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
     return parts.map((part, i) => {
@@ -224,8 +227,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Certificates */}
-      <CertificatesSection />
+      {/* Certificates — hand-picked subset; full list lives on /certificates */}
+      <CertificatesSection
+        certificates={aboutCertificates}
+        viewAllHref="/certificates"
+      />
 
       {/* Achievements */}
       <section className="mx-auto mt-16 max-w-5xl px-6">

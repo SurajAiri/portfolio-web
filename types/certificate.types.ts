@@ -12,7 +12,13 @@ export interface Certificate {
   skills: string[]; // tech/skills tags — reuses the same pill UI as project tags
   highlights?: string[]; // optional bullet points: what was learned / key topics
 
-  order?: number; // manual override for scroll-strip order; defaults to date desc if omitted
-  featured?: boolean; // pin to the front of the strip even without a manual order
+  order?: number; // manual override for display order (home, about, and the /certificates page); defaults to date desc if omitted
+  featured?: boolean; // pin to the front when sorting even without a manual order
   type: "specialized" | "single"; // type of certificate, defaults to "single"
+
+  // Visibility controls — the full set always shows on /certificates.
+  // These let you keep the home page and About page short by hand-picking
+  // a subset instead of dumping every certificate on every page.
+  showOnHome?: boolean; // include in the home page strip; defaults to false
+  showOnAbout?: boolean; // include in the About page section; defaults to false
 }
