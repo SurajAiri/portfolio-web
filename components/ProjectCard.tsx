@@ -1,20 +1,47 @@
+"use client";
+
 import { formatProjectTimeline, getSortedProjectLinks } from "@/data/projects";
 import type { Project } from "@/types";
 import { ArrowUpRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 import ProjectThumbnail from "./ProjectThumbnail";
+import { saveProjectOrigin, type ProjectOrigin } from "@/lib/projectNav";
 
-export default function ProjectCard({ project }: { project: Project }) {
+export default function ProjectCard({
+  project,
+  originContext,
+}: {
+  project: Project;
+  // Which page this card lives on, so the detail page's back button can
+  // return here (and to this exact scroll position) instead of always
+  // landing on /projects.
+  originContext: ProjectOrigin["from"];
+}) {
+  const router = useRouter();
   // Card is compact — show only the top 2 links by type priority
   // (demo > code > docs > case-study > article > other).
   const topLinks = getSortedProjectLinks(project).slice(0, 2);
+
+  const goToProject = () => {
+    saveProjectOrigin(originContext);
+    router.push(`/projects/${project.slug}`);
+  };
+
   return (
     <div
       data-project-slug={project.slug}
       role="button"
       tabIndex={0}
+      onClick={goToProject}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          goToProject();
+        }
+      }}
       className="group flex cursor-pointer flex-col overflow-hidden rounded-xl bg-white/3 p-6 pt-0 transition-all duration-300 hover:-translate-y-1 hover:bg-white/6 hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)]"
     >
-      {/* Placeholder thumbnail — swap in real media via project.media once available */}
+      {/* Real project media when available, generated placeholder otherwise */}
       <div className="-mx-6 mb-5">
         <ProjectThumbnail project={project} />
       </div>
@@ -95,7 +122,8 @@ export default function ProjectCard({ project }: { project: Project }) {
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-white/40 transition-colors duration-200 hover:text-accent"
+            onClick={(e) => e.stopPropagation()}
+            className="relative z-10 inline-flex items-center gap-1 text-white/40 transition-colors duration-200 hover:text-accent"
           >
             {link.label.toUpperCase()} <ArrowUpRight size={12} />
           </a>

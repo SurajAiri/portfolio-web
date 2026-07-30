@@ -49,6 +49,75 @@ export const projects: Project[] = [
     ],
     productType: ["WEB APP", "CLI"], // Desktop (Electron) app — using WEB APP since ProductType has no Desktop option, plus a standalone CLI
     timeline: { startDate: "2026-02-10", isCurrent: true }, // estimated — see note below
+
+    // media: TEMPLATE — copy this shape once real screenshots/clips exist.
+    // 1. Drop files in public/projects/zensho/ (e.g. cover.png, demo.mp4)
+    // 2. Reference them here with a leading slash: "/projects/zensho/cover.png"
+    // 3. Exactly one item should have role: "thumbnail" — that's what
+    //    ProjectThumbnail renders on cards/grids; the rest show up in the
+    //    detail-page gallery in `order`.
+    // media: [
+    //   {
+    //     id: "zensho-cover",
+    //     kind: "image",
+    //     role: "thumbnail",
+    //     src: "/projects/zensho/cover.png",
+    //     caption: "Rough-cut timeline view",
+    //     order: 0,
+    //   },
+    //   {
+    //     id: "zensho-demo",
+    //     kind: "video",
+    //     role: "demo",
+    //     src: "/projects/zensho/demo.mp4",
+    //     poster: "/projects/zensho/demo-poster.jpg",
+    //     caption: "End-to-end rough cut, screencast to DaVinci export",
+    //     order: 1,
+    //   },
+    //   {
+    //     id: "zensho-architecture",
+    //     kind: "image",
+    //     role: "diagram",
+    //     src: "/projects/zensho/architecture.png",
+    //     caption: "Electron <-> FastAPI pipeline",
+    //     order: 2,
+    //   },
+    // ],
+
+    media: [
+      // {
+      //   id: "zensho-demo-show-gif",
+      //   kind: "gif",
+      //   role: "thumbnail",
+      //   src: "https://imgur.com/rbRYD1y",
+      //   caption: "Showing demo page gif",
+      //   order: 0,
+      // },
+      {
+        id: "editor-paragraph-view-img",
+        kind: "image",
+        role: "thumbnail",
+        src: "/projects/zensho/editor-paragraph-view.webp",
+        caption: "MacOS app showing rough-cut paragraph view",
+        order: 0,
+      },
+      {
+        id: "",
+        kind: "image",
+        role: "thumbnail",
+        src: "/projects/zensho/editor-segment-view.webp",
+        caption: "MacOS app showing rough-cut segment view",
+        order: 0,
+      },
+      {
+        id: "zensho-demo-show-img",
+        kind: "image",
+        role: "demo",
+        src: "/projects/zensho/zensho-demo.webp",
+        caption: "Showing demo page image",
+        order: 5,
+      },
+    ],
     links: [
       {
         label: "GitHub",
@@ -107,8 +176,7 @@ export const projects: Project[] = [
       endDate: "2026-04-01",
     },
 
-    // Add when available:
-    // media: [],
+    // media: see the `zensho` project above for a filled-out example of this shape.
     links: [
       {
         label: "LinkedIn Post",

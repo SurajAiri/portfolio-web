@@ -37,7 +37,7 @@ export default function ProjectTabs({ projects }: { projects: Project[] }) {
           .filter((p) => p.featured)
           .slice(0, MAX_VISIBLE)
           .map((p) => (
-            <ProjectCard key={p.id} project={p} />
+            <ProjectCard key={p.id} project={p} originContext="home" />
           ))}
       </div>
     );
@@ -72,7 +72,9 @@ export default function ProjectTabs({ projects }: { projects: Project[] }) {
           className="mt-8 grid gap-6 lg:grid-cols-3"
         >
           {visible.length > 0 ? (
-            visible.map((p) => <ProjectCard key={p.id} project={p} />)
+            visible.map((p) => (
+              <ProjectCard key={p.id} project={p} originContext="home" />
+            ))
           ) : (
             <p className="col-span-full py-8 text-center font-mono text-sm text-muted">
               Nothing tagged here yet.

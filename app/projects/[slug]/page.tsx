@@ -3,9 +3,11 @@ import {
   projects,
   getProjectBySlug,
   getSortedProjectLinks,
+  getSortedProjectMedia,
 } from "@/data/projects";
 import { notFound } from "next/navigation";
-import Link from "next/link";
+import ProjectBackNav from "@/components/ProjectBackNav";
+import ProjectGallery from "@/components/ProjectGallery";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -36,16 +38,14 @@ export default async function ProjectDetailPage({
 
   // Full page has room for everything; group by type-priority order.
   const allLinks = getSortedProjectLinks(project);
+  const media = getSortedProjectMedia(project);
 
   return (
     <div className="pb-20">
       <article className="mx-auto max-w-3xl px-6 pt-28 sm:pt-32">
-        <Link
-          href="/projects"
-          className="inline-flex items-center gap-1 font-mono text-xs tracking-wider text-white/40 transition-colors duration-200 hover:text-accent"
-        >
-          ← BACK TO PROJECTS
-        </Link>
+        <ProjectBackNav />
+
+        {media.length > 0 && <ProjectGallery media={media} />}
 
         <div className="mt-8">
           <div className="flex flex-wrap items-center gap-1.5">

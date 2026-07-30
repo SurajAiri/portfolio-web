@@ -1,5 +1,7 @@
-import { Bot, Boxes, Radar, Terminal, Video, Wrench } from "lucide-react";
+import { Bot, Boxes, Play, Radar, Terminal, Video, Wrench } from "lucide-react";
+import Image from "next/image";
 import type { Project } from "@/types";
+import { getSortedProjectMedia } from "@/data/projects";
 
 // Small deterministic hash so the same project always renders the same
 // placeholder pattern (no randomness -> no hydration mismatch).
@@ -33,7 +35,7 @@ function renderProjectIcon(project: Project) {
   return <Wrench {...iconProps} />;
 }
 
-export default function ProjectThumbnail({ project }: { project: Project }) {
+function GeneratedPlaceholder({ project }: { project: Project }) {
   const seed = hashString(project.id);
 
   // Deterministic but varied: rotation, dot spacing, line pattern per project
@@ -98,6 +100,74 @@ export default function ProjectThumbnail({ project }: { project: Project }) {
       <span className="absolute bottom-2 right-2 rounded bg-black/40 px-1.5 py-0.5 font-mono text-[9px] tracking-wider text-white/25">
         {project.productType[0]}
       </span>
+    </div>
+  );
+}
+
+// Derives a static preview image for any media item, including video/youtube/
+// loom kinds that need an explicit poster frame rather than the raw src.
+function resolvePreviewImage(
+  item: NonNullable<Project["media"]>[number]
+): string | null {
+  if (item.kind === "image" || item.kind === "gif") return item.src;
+  if (item.poster) return item.poster;
+  if (item.kind === "youtube") {
+    const id = item.src.match(
+      /(?:youtu\.be\/|v=|embed\/)([a-zA-Z0-9_-]{11})/
+    )?.[1];
+    if (id) return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+  }
+  return null;
+}
+
+export default function ProjectThumbnail({ project }: { project: Project }) {
+  const media = getSortedProjectMedia(project);
+  const cover =
+    media.find((m) => m.role === "thumbnail") ?? media[0] ?? undefined;
+
+  if (!cover) return <GeneratedPlaceholder project={project} />;
+
+  const previewSrc = resolvePreviewImage(cover);
+  const isPlayable =
+    cover.kind === "video" || cover.kind === "youtube" || cover.kind === "loom";
+
+  return (
+    <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg bg-white/[0.03]">
+      {previewSrc ? (
+        cover.kind === "gif" ? (
+          // Gifs must stay unoptimized so the animation isn't flattened to one frame.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={previewSrc}
+            alt={cover.caption ?? project.title}
+            className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          />
+        ) : (
+          <Image
+            src={previewSrc}
+            alt={cover.caption ?? project.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          />
+        )
+      ) : (
+        <GeneratedPlaceholder project={project} />
+      )}
+
+      {isPlayable && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/25 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black/50 text-white/90 backdrop-blur-sm">
+            <Play size={18} className="ml-0.5" fill="currentColor" />
+          </span>
+        </div>
+      )}
+
+      {media.length > 1 && (
+        <span className="absolute bottom-2 right-2 rounded bg-black/50 px-1.5 py-0.5 font-mono text-[9px] tracking-wider text-white/60">
+          +{media.length - 1} MORE
+        </span>
+      )}
     </div>
   );
 }

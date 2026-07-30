@@ -1,11 +1,12 @@
 import { projects } from "@/data/projects";
 import Link from "next/link";
 import ProjectTabs from "./ProjectTabs";
-import ProjectsInteractiveGrid from "./ProjectsInteractiveGrid";
+import ScrollRestore from "./ScrollRestore";
 
 export default function FeaturedProjectsSection() {
   return (
     <section id="projects" className="mx-auto max-w-5xl px-6 py-24">
+      <ScrollRestore path="/" />
       {/* Header row */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
@@ -30,11 +31,9 @@ export default function FeaturedProjectsSection() {
 
       {/* Tabbed subset — "overall" shows featured work, other tabs are
           derived from data/projects.ts `homeTags` so the homepage doesn't
-          dump the entire catalog on the visitor at once. Click-to-open-dialog
-          interaction is a shared boundary around the tabs. */}
-      <ProjectsInteractiveGrid projects={projects}>
-        <ProjectTabs projects={projects} />
-      </ProjectsInteractiveGrid>
+          dump the entire catalog on the visitor at once. Cards link straight
+          to each project's detail page. */}
+      <ProjectTabs projects={projects} />
     </section>
   );
 }
