@@ -102,9 +102,23 @@ body > footer {
 .marquee-row:hover .marquee-track-reverse {
   animation-play-state: paused;
 }
+
+/* Homepage certificates strip — single-row reactbits-style logo loop.
+   Duration is set per-instance via inline style so speed stays constant
+   regardless of how many certificates exist (see CertificateLogoLoop.tsx). */
+.logo-loop-track {
+  animation-name: marquee-left;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.logo-loop-row:hover .logo-loop-track {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee-track,
-  .marquee-track-reverse {
+  .marquee-track-reverse,
+  .logo-loop-track {
     animation: none;
   }
 }

@@ -131,6 +131,9 @@ export const journey: JourneyMilestone[] = [
     period: "2022",
     title: "Joined Chandigarh University",
     description: "Started my B.E. in Computer Science and Engineering.",
+    // Renders a dotted divider with this label right after this entry —
+    // change or remove this line to move/hide the divider.
+    dividerAfter: "EARLIER",
   },
   {
     period: "Before 2022",

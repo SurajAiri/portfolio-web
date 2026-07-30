@@ -62,7 +62,7 @@ export default function CertificatesSection() {
   const rowB = certificates.slice(mid);
 
   return (
-    <section className="mx-auto mt-16 max-w-5xl px-6">
+    <section id="certificates" className="mx-auto mt-16 max-w-5xl px-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <span className="text-accent">

@@ -39,6 +39,7 @@ export interface JourneyMilestone {
   title: string;
   description: string;
   tag?: "milestone" | "setback"; // "setback" renders with a muted/dashed style instead of the accent
+  dividerAfter?: string; // if set, renders a dotted horizontal divider (with this label) right after this entry
 }
 
 export interface SkillCategory {
