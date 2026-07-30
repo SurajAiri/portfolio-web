@@ -41,7 +41,7 @@ export interface Project {
   title: string;
   problem: string; // problem or pain point being addressed
   result: string; // impact or outcome achieved
-  projectSummary: string; // concise summary of the project (what, how, impact)
+  projectSummary: string; // concise summary of the project (what, how, impact) [within 100 characters]
   description: string; // detailed description of the project
   category: ProjectCategory[]; // order matters - primary category should be first
   tags: string[]; // specific technologies, frameworks, or methodologies used

@@ -78,7 +78,7 @@ export default function ProjectCard({
       </div>
 
       {/* Description */}
-      <p className="mt-4 text-sm leading-relaxed text-white/40 line-clamp-3">
+      <p className="mt-4 text-sm leading-relaxed text-white/90 line-clamp-3 font-semibold transition-colors duration-200 group-hover:text-accent">
         {project.projectSummary}
       </p>
 

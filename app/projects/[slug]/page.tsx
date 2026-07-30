@@ -58,7 +58,7 @@ export default async function ProjectDetailPage({
               </span>
             ))}
           </div>
-          <h1 className="mt-2 font-mono text-2xl font-bold tracking-tight sm:text-3xl">
+          <h1 className="mt-2 font-mono text-2xl font-bold tracking-tight text-accent sm:text-3xl">
             {project.title.toUpperCase()}
           </h1>
           <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/35">
@@ -66,12 +66,9 @@ export default async function ProjectDetailPage({
           </p>
         </div>
 
-        <div className="mt-10 space-y-8">
+        <div className="mt-10 space-y-4">
           <div>
-            <h2 className="font-mono text-xs tracking-[0.2em] text-muted mb-2">
-              SNAPSHOT
-            </h2>
-            <p className="text-sm leading-relaxed text-foreground/80">
+            <p className="leading-relaxed text-accent/80 font-semibold">
               {project.projectSummary}
             </p>
           </div>

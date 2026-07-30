@@ -10,7 +10,7 @@ export const projects: Project[] = [
     result:
       "Built a full desktop application that transcribes footage, uses an LLM to make AI-driven keep/cut decisions, and exports either directly or as a fully editable OpenTimelineIO timeline for DaVinci Resolve — with a custom LCS-based text-to-timestamp aligner and waveform-aware boundary snapping so cuts land on natural pauses rather than mid-word or mid-syllable.",
     projectSummary:
-      "A privacy-first, BYOK desktop video editor (Electron + Python/FastAPI) that auto-generates AI rough cuts from screencasts via Deepgram transcription and LLM-driven editorial decisions, then exports non-destructively to DaVinci Resolve via OpenTimelineIO.",
+      "Desktop app that transcribes footage, AI-generates rough cuts, and exports editable timelines to DaVinci Resolve.",
     description:
       "Zensho is a hybrid desktop application: an Electron/React/Vite frontend drives a locally-spawned Python FastAPI backend over HTTP (bound to 127.0.0.1 for local-only traffic), chosen specifically so CPU/IO-heavy ffmpeg and transcription work never blocks the UI thread. The processing pipeline runs each video through ffmpeg audio extraction, Deepgram Nova-3 word-level transcription, and an LLM rough-cut pass (via LiteLLM, so any OpenAI-compatible or BYOK provider can be swapped in) that decides what to keep, cut, or treat as silence.\n\nKey technical achievements include:\n- Custom LCS-based transcript aligner: the LLM returns only the words worth keeping, and a hand-written Longest-Common-Subsequence dynamic-programming aligner maps that refined script back onto the original word-level timestamps, with 'last-occurrence-wins' tie-breaking so repeated takes resolve to the correct (latest) occurrence, and a minimum-LCS-ratio fallback that preserves all content rather than silently discarding it if the LLM paraphrases instead of cutting.\n- Waveform-aware boundary snapping: a separate preprocessor snaps every cut point to the nearest word boundary and then refines further by extracting a PCM window via ffmpeg and finding the minimum-RMS-energy point, so cuts fall in natural pauses instead of mid-syllable — with a repair pass that clamps overlaps and removes now-redundant silence segments between adjacent kept clips.\n- Serialized async processing queue: a singleton `asyncio.Queue` worker processes one video at a time through a `QUEUED → PREPROCESSING → TRANSCRIBING → ROUGH_CUTTING → COMPLETED` state machine, preventing concurrent ffmpeg instances and LLM rate-limit bans while the UI polls a `/status` endpoint for live progress.\n- Non-destructive DaVinci Resolve export: an OpenTimelineIO exporter builds a multi-FPS-safe `.otio` timeline (plus FCP XML) from the same 'resolved timeline' used for the in-app preview player and MP4 export, linking video/audio clips via matching reel metadata so Resolve treats them as synced pairs — letting editors drag the AI's decisions straight into a professional NLE with every cut still editable.\n- Human-in-the-loop editing model: AI-generated cuts (`rough_cut_ai`) are never overwritten — user edits are stored as a separate `rough_cut_human` layer, with all exporters resolving `rough_cut_human ?? rough_cut_ai` per video, so some clips in a project can carry human edits while others still use the raw AI cut.\n- Dual interface: the same backend core is exposed both through the Electron desktop app and a standalone CLI (`run`, `process`, `export`, `status`, `config`) for scripted or headless use.",
     category: ["AI", "FULL STACK"],
@@ -120,6 +120,11 @@ export const projects: Project[] = [
     ],
     links: [
       {
+        label: "Live Demo",
+        url: "https://zensho.surajairi.com.np",
+        type: "demo",
+      },
+      {
         label: "GitHub",
         url: "https://github.com/surajairi/zensho",
         type: "code",
@@ -142,7 +147,7 @@ export const projects: Project[] = [
       "Built an end-to-end AI-assisted editing pipeline that automates transcript-based rough cuts, supports human-in-the-loop review, and exports directly to production formats (MP4 and DaVinci-compatible timelines).",
 
     projectSummary:
-      "Developed an async Python video editing system with FastAPI + CLI that extracts audio, transcribes with word timestamps, generates AI rough cuts, supports manual segment correction, and exports preview/final outputs plus DaVinci project files.",
+      "Backend pipeline that transcribes footage and generates AI rough cuts with human-in-the-loop review and export.",
 
     description:
       "AI Video Editor V1 is a backend-first editing platform focused on accelerating first-pass video editing. It processes raw videos through audio extraction, Deepgram transcription, and LLM-driven rough-cut generation, then allows users to refine segment validity before export. The system includes project/video lifecycle management, robust JSON persistence, and multiple export targets including preview MP4, high-quality MP4, and OTIO/XML for NLE workflows like DaVinci Resolve.",
@@ -199,7 +204,7 @@ export const projects: Project[] = [
     result:
       "Built a complete three-service system (simulator, Next.js dashboard, Python inference engine) that runs 9 independent signal extractors in parallel — 7 rule-based and 2 LLM-backed — and maintains a live Bayesian belief over candidate identity, surfacing a real-time verdict with confidence and a per-signal reasoning trail on the dashboard.",
     projectSummary:
-      "A real-time AI identification system that watches a simulated multi-participant video call and determines which participant is the actual interview candidate, using a Bayesian belief engine with log-odds accumulation, per-identifier exponential decay, and a 5-state detection state machine — all streamed live to a Next.js dashboard over WebSocket.",
+      "Real-time system identifying the actual interview candidate via Bayesian belief across 9 parallel live signals.",
     description:
       "Sherlock treats candidate identification as a continuous probabilistic inference problem rather than a name lookup. The system is split into three services that communicate over WebSocket: a Python scenario simulator, a Next.js relay dashboard, and a Python FastAPI belief engine.\n\nKey technical achievements include:\n- **Belief Engine**: Maintains two independent log-odds tracks per participant — `logit_candidate` (converted via softmax across all participants, so probabilities are zero-sum) and `logit_not_candidate` (converted via per-participant sigmoid, allowing multiple people to simultaneously be eliminated) — updated on every incoming event.\n- **Per-Identifier Decay**: Each identifier's contribution is stored as its own bucket with a configurable `decay_half_life`. Decayed values are summed lazily at read time (`raw * 0.5^(elapsed / half_life)`) so stale evidence fades without a background timer.\n- **9 Pluggable Identifiers**: `name_match`, `email_identity`, `host_organizer` (rule-based, one-time); `speaking_share`, `qa_pattern`, `screenshare_heuristic`, `silent_observer` (rule-based, continuous); `llm_name_role` and `llm_transcript_role` (LLM-backed via LiteLLM, fail-open — the engine stays fully functional if the LLM provider is unreachable).\n- **DAG-Ordered Processor Registry**: Identifiers are registered in a dependency DAG (Kahn's algorithm); downstream processors are guaranteed to run only after their dependencies have produced output into a shared Feature Cache.\n- **5-State Detection Machine**: `exploring → searching → likely_candidate → stable_candidate → lost_candidate`, with a warmup gate (≥ 20 s elapsed + ≥ 3 evidence pieces) to prevent premature mis-identification, and hysteresis (separate entry/exit thresholds + a streak requirement) to prevent flapping.\n- **Scenario Simulator**: Compiles YAML scenario files into a timed event stream (`participant_join`, `transcript_segment`, `screenshare_start`, etc.) over WebSocket at configurable playback speed; includes 9 authored scenarios covering edge cases like mid-call renames, silent observer farms, and webcam-off sessions.\n- **Next.js Dashboard**: Relays the event stream to the engine, displays live transcript, participant tiles, and an engine panel with real-time confidence scores and per-identifier reasoning lines; uses Zustand for session state and Zod for wire-format validation.",
     category: ["AI", "FULL STACK"],
@@ -266,7 +271,7 @@ export const projects: Project[] = [
     result:
       "Developed a fully functional AI assistant with 8 built-in tools, supporting multiple LLM providers and Telegram integration, demonstrating expertise in async Python development, API design, and agent-based architectures.",
     projectSummary:
-      "An opinionated personal AI assistant built from scratch with Python, featuring iterative tool-calling, message-bus architecture, and sandboxed execution - enabling complex multi-step tasks through LLM-driven automation.",
+      "Personal AI assistant with 8 built-in tools, multi-LLM support, and Telegram messaging integration.",
     description:
       "MeroBot is a comprehensive AI assistant that bridges communication channels (currently Telegram) with large language models through an async-first message-bus architecture. The system implements an iterative agent loop where the LLM can chain up to 10 tool calls per message, enabling sophisticated multi-step reasoning and task execution.\n\nKey technical achievements include:\n- **Modular Architecture**: Clean separation of concerns with dedicated layers for agents, communication handlers, LLM providers, and tools\n- **Tool Ecosystem**: 8 built-in tools covering file operations, web search/scraping, code execution, database queries, and sub-agent delegation\n- **Provider Flexibility**: Pluggable LLM backend supporting OpenAI-compatible APIs, LiteLLM (100+ providers), and direct HTTP implementations\n- **Security & Sandboxing**: All file and code operations confined to a configurable workspace directory\n- **Async Design**: Full asyncio implementation with message queues for scalable, non-blocking operations\n- **Extensibility**: Well-documented ABCs and interfaces for adding new channels, providers, and tools",
     category: ["AI", "FULL STACK"],
@@ -324,7 +329,7 @@ export const projects: Project[] = [
     result:
       "Built a working AI-powered CLI that auto-categorizes screenshots, renames/moves them into structured folders, stores searchable metadata in SQLite, and generates an interactive HTML report for quick review.",
     projectSummary:
-      "CLI tool that uses a vision LLM to analyze screenshots, classify them into practical categories, persist metadata in SQLite, and produce a filterable report (grid/table) with Finder shortcuts.",
+      "CLI that uses vision AI to classify, rename, and organize screenshots into a searchable report.",
     description:
       "AI Screenshot Organizer is a Python CLI-first utility designed to reduce screenshot clutter. It scans image files, sends each to a vision-capable LLM through LiteLLM, parses structured JSON output with fallback-safe parsing strategies, and moves files into category folders with collision-safe naming. Each item is saved to SQLite with batch IDs and timestamps, enabling filtered retrieval by category, search term, and run. The project also ships a self-contained HTML visualizer with grid/table modes, category filter pills, and local file links for fast triage. Runtime workspace management and environment key handling are built into the CLI to keep setup simple across providers.",
 
@@ -381,7 +386,7 @@ export const projects: Project[] = [
       "Built and published a Python package on PyPI that introduces a 3-meta-tool execution layer, reducing tool-context overhead by exposing tools on demand and using Python function-call syntax with AST-based validation. Added robust validation/error formatting and 90 automated tests.",
 
     projectSummary:
-      "A zero-dependency Python library that helps AI agents discover and execute tools efficiently through search_tools, execute, and describe_tool, with safe AST parsing, partial-failure handling, and pluggable search strategies.",
+      "PyPI library letting AI agents discover and execute tools on demand, reducing token overhead.",
 
     description:
       "AI Tools Executor is an executor abstraction between LLM agents and real tool functions. Instead of sending every tool schema to the model each turn, the agent works through three meta-tools: search_tools for discovery, execute for running one or many calls, and describe_tool for deep docs. The execution path parses Python call syntax via ast.parse (without executing arbitrary code), validates parameters against a registry, and returns structured per-call outcomes so multi-call requests can partially succeed. The library includes async execution, thread-safe registry operations, customizable search strategies, OpenAI-compatible meta-tool schema helpers, and a consistent error format designed for agent self-correction. The project is packaged for PyPI and targets Python 3.10+ with no runtime dependencies.",
@@ -458,7 +463,7 @@ export const projects: Project[] = [
       "Built and published a reusable Python library on PyPI (v0.1.4) that renders scripted videos through a deterministic JSON project format, with modular effects/transitions, subtitle animations, and configurable resize strategies.",
 
     projectSummary:
-      "A pure-Python video composition toolkit that converts JSON timelines into rendered MP4 output using OpenCV + NumPy, supporting media effects, transition pipelines, and animated subtitles for automated short-form content workflows.",
+      "Python library rendering JSON-scripted video timelines with effects and animated subtitles into MP4.",
 
     description:
       "VisualKit is a scriptable video-rendering library focused on automation rather than manual editing. The architecture separates concerns into media elements, transition elements, subtitle rendering, timeline orchestration, and video config validation. It supports both image and video assets, multiple motion/stylistic effects, a broad transition set, and subtitle animation modes (typewriter/fade/simple) with wrapping and background styling. The rendering flow loads a JSON project, builds a timeline, resolves frame-by-frame composition, applies transitions between adjacent media nodes, overlays subtitles, and writes encoded output via OpenCV VideoWriter. The package is distributed through PyPI and designed for extension by adding new effects, transitions, and animation branches.",
@@ -511,7 +516,7 @@ export const projects: Project[] = [
     result:
       "Delivered a working full-stack alerting system with authenticated mobile users, device token management, webhook-driven push notifications, and in-app alarm controls. The project demonstrates end-to-end ownership across mobile client, API design, authentication, notification delivery, and deployment-ready configuration.",
     projectSummary:
-      "OpenAlert is a Flutter + Node.js system that turns external events into actionable mobile alerts. It combines JWT-based auth, FCM push delivery, device registration, and alarm-style notification behavior to support faster user response for urgent events.",
+      "Full-stack Flutter/Node app turning webhook events into instant, alarm-style mobile push alerts.",
     description:
       "Built a full-stack alerting platform with a Flutter mobile app and an Express/MongoDB backend. The app supports registration/login, token persistence, FCM setup, local notification handling, alarm playback/stop actions, and device connectivity views. The backend exposes REST APIs for auth, device registration, and notification/webhook actions, using JWT auth middleware, Joi validation, Mongoose models, and Firebase Admin for push delivery. A cron-based health-check mechanism was added for service uptime monitoring. Backend was configured for hosted API usage and webhook token validation for controlled external triggering.",
     category: ["FULL STACK", "BACKEND", "FRONTEND"],
@@ -573,7 +578,7 @@ export const projects: Project[] = [
     result:
       "Built a real-time voice assistant with on-device VAD, STT, and fast TTS — enabling natural, low-latency conversations with LLM-powered tool use.",
     projectSummary:
-      "Real-time voice AI assistant with full-duplex conversation, dynamic MCP tool usage, and low-latency speech pipeline.",
+      "Real-time, full-duplex voice assistant with on-device STT/TTS and LLM-powered dynamic tool use.",
     description:
       "Developed a real-time voice assistant enabling full-duplex conversations with on-device VAD, STT, and fast TTS response. Integrated LangChain + LangGraph agent using MCP tools (FastMCP) for contextual reasoning and dynamic tool use. Implemented a Kokoro TTS pipeline with optional echo cancellation (AEC) for natural low-latency speech output. Built a modular system allowing easy swaps of VAD, STT, TTS, or LLM components for flexible configuration.",
     tags: ["real-time", "voice assistant", "agentic ai", "mcp", "low latency"],
@@ -614,7 +619,7 @@ export const projects: Project[] = [
     result:
       "Engineered a complete AI-powered video automation pipeline, reducing production time from hours to under 2 minutes with 15x faster rendering than MoviePy.",
     projectSummary:
-      "End-to-end script-to-video automation system with custom render engine, AI generation, and fast multi-resolution export.",
+      "Custom engine converting text stories into fully edited, multi-resolution videos in under 2 minutes.",
     description:
       "Engineered a complete AI-powered video automation pipeline transforming text stories into polished video content using a custom video editor, reducing production time from hours to under 2 minutes. Architected a modular video processing engine with 15+ text animations (typewriter, glitch, bounce) and smart media effects, delivering 15x faster rendering than MoviePy. Integrated AI-driven TTS, image generation, and precise audio transcription with timestamp synchronization, enabling fully automated script-to-video workflow with multi-resolution support.",
     tags: [
@@ -652,7 +657,7 @@ export const projects: Project[] = [
     result:
       "Built a full-stack generative AI platform analyzing 1,000+ speeches with 25%+ better feedback accuracy using Whisper and GPT-4.",
     projectSummary:
-      "Speech coaching platform that evaluates recordings with AI models and delivers contextual feedback, scoring, and improvements.",
+      "AI platform analyzing speech recordings with Whisper and GPT-4 to give interview/presentation feedback.",
     description:
       "Developed a full-stack generative AI platform for personalized speech evaluation, helping users improve interviews, presentations, and fluency through AI-driven feedback and performance tracking. Engineered real-time evaluation pipeline analyzing 1,000+ speeches using Whisper and GPT-4 for tone, structure, and vocabulary assessment with 25%+ better feedback accuracy. Integrated LangChain and OpenAI to deliver contextual feedback, response enhancement suggestions, and mind maps — enabling contextual learning and better retention. Designed scalable backend infrastructure with Node.js, MongoDB, and JWT authentication, handling 50+ concurrent users and seamless multimedia processing.",
     tags: [
