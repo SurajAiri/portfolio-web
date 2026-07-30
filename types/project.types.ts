@@ -60,6 +60,12 @@ export interface Project {
   // optional manual `order` as a tie-breaker.
   links?: ProjectLink[];
 
+  // Freeform tags used only to bucket this project into homepage filter tabs
+  // (e.g. ["agents"], ["libraries"]). Purely presentational — add any string;
+  // the "Overall" tab always shows everything regardless of this field, and
+  // new tab buttons appear automatically once any project uses a new tag.
+  homeTags?: string[];
+
   featured: boolean; // whether to feature this project on the homepage
   isArchived?: boolean; // whether the project is archived or no longer maintained
   justFunProject: boolean; // whether this project was built just for fun or learning, without a specific problem statement or impact goal

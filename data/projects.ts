@@ -51,6 +51,11 @@ export const projects: Project[] = [
     timeline: { startDate: "2026-02-10", isCurrent: true }, // estimated — see note below
     links: [
       {
+        label: "Live Site",
+        url: "https://zensho.surajairi.com.np",
+        type: "demo",
+      },
+      {
         label: "GitHub",
         url: "https://github.com/surajairi/zensho",
         type: "code",
@@ -240,6 +245,7 @@ export const projects: Project[] = [
         type: "code",
       },
     ],
+    homeTags: ["agents"],
     featured: true,
     isArchived: false,
     justFunProject: false,
@@ -371,6 +377,7 @@ export const projects: Project[] = [
       },
     ],
 
+    homeTags: ["libraries"],
     featured: true,
     isArchived: false,
     justFunProject: false,
@@ -426,6 +433,7 @@ export const projects: Project[] = [
       },
     ],
 
+    homeTags: ["libraries"],
     featured: false,
     isArchived: false,
     justFunProject: false,
@@ -527,6 +535,7 @@ export const projects: Project[] = [
         type: "code",
       },
     ],
+    homeTags: ["agents"],
     featured: false,
     justFunProject: true,
     isMiniProject: true,

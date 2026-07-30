@@ -1,10 +1,11 @@
 import { personalInfo, valuePropositions } from "@/data/personal";
 import { Mail, FileText, Linkedin, Github } from "lucide-react";
+import Reveal from "./motion/Reveal";
 
 export default function CTASection() {
   return (
     <section className="mt-8">
-      <div className="mx-auto grid max-w-5xl gap-12 px-6 py-24 md:grid-cols-[1fr_340px]">
+      <Reveal className="mx-auto grid max-w-5xl gap-12 px-6 py-24 md:grid-cols-[1fr_340px]">
         {/* Left column */}
         <div>
           <span className="inline-block rounded-full bg-accent/10 px-3 py-1 font-mono text-[10px] tracking-[0.2em] text-accent">
@@ -82,7 +83,7 @@ export default function CTASection() {
             </a>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

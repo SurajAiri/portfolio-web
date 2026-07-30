@@ -1,4 +1,5 @@
 import { skills } from "@/data/skills";
+import Reveal from "./motion/Reveal";
 
 export default function SkillsSection() {
   return (
@@ -8,8 +9,8 @@ export default function SkillsSection() {
           Skills
         </h2>
         <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-          {skills.map((category) => (
-            <div key={category.name}>
+          {skills.map((category, i) => (
+            <Reveal key={category.name} delay={i * 0.05}>
               <h3 className="font-mono text-xs font-semibold tracking-[0.2em] text-muted">
                 {category.name.toUpperCase()}
               </h3>
@@ -23,7 +24,7 @@ export default function SkillsSection() {
                   </span>
                 ))}
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

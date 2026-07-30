@@ -37,7 +37,6 @@ export default function ProjectsInteractiveGrid({
   return (
     <>
       <div
-        className="mt-12 grid gap-6 lg:grid-cols-3"
         onClick={openFromEvent}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {

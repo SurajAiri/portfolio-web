@@ -63,16 +63,22 @@ export default function HeroSection() {
 
         {/* Right — profile photo + social icons */}
         <div className="flex flex-col items-center gap-4 md:items-end">
-          <div className="h-52 w-52 overflow-hidden rounded-full bg-white/[0.04] md:h-64 md:w-64">
-            <Image
-              src="/profile.webp"
-              alt={personalInfo.name}
-              width={256}
-              height={256}
-              sizes="(max-width: 768px) 208px, 256px"
-              className="h-full w-full object-cover"
-              loading="eager"
+          <div className="relative h-52 w-52 md:h-64 md:w-64">
+            <div
+              className="absolute -inset-4 rounded-full bg-accent/15 blur-2xl"
+              aria-hidden="true"
             />
+            <div className="relative h-full w-full overflow-hidden rounded-full bg-white/[0.04] ring-1 ring-accent/20">
+              <Image
+                src="/profile.webp"
+                alt={personalInfo.name}
+                width={256}
+                height={256}
+                sizes="(max-width: 768px) 208px, 256px"
+                className="h-full w-full object-cover"
+                loading="eager"
+              />
+            </div>
           </div>
           {/* Social icons */}
           <div className="flex items-center gap-3">

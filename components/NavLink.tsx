@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion } from "motion/react";
 
 export default function NavLink({
   href,
@@ -16,13 +17,22 @@ export default function NavLink({
   return (
     <Link
       href={href}
-      className={`rounded-full px-5 py-1.5 text-sm font-medium transition-all duration-200 ${
-        isActive
-          ? "bg-white/10 text-foreground"
-          : "text-muted hover:text-accent"
-      }`}
+      className="relative rounded-full px-5 py-1.5 text-sm font-medium"
     >
-      {label}
+      {isActive && (
+        <motion.span
+          layoutId="nav-active-pill"
+          className="absolute inset-0 rounded-full bg-white/10"
+          transition={{ type: "spring", stiffness: 400, damping: 32 }}
+        />
+      )}
+      <span
+        className={`relative z-10 transition-colors duration-200 ${
+          isActive ? "text-foreground" : "text-muted hover:text-accent"
+        }`}
+      >
+        {label}
+      </span>
     </Link>
   );
 }

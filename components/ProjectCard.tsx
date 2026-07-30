@@ -1,6 +1,7 @@
 import { formatProjectTimeline, getSortedProjectLinks } from "@/data/projects";
 import type { Project } from "@/types";
 import { ArrowUpRight } from "lucide-react";
+import ProjectThumbnail from "./ProjectThumbnail";
 
 export default function ProjectCard({ project }: { project: Project }) {
   // Card is compact — show only the top 2 links by type priority
@@ -11,8 +12,13 @@ export default function ProjectCard({ project }: { project: Project }) {
       data-project-slug={project.slug}
       role="button"
       tabIndex={0}
-      className="group flex cursor-pointer flex-col rounded-xl bg-white/3 p-6 transition-all duration-300 hover:bg-white/6 hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)]"
+      className="group flex cursor-pointer flex-col overflow-hidden rounded-xl bg-white/3 p-6 pt-0 transition-all duration-300 hover:-translate-y-1 hover:bg-white/6 hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)]"
     >
+      {/* Placeholder thumbnail — swap in real media via project.media once available */}
+      <div className="-mx-6 mb-5">
+        <ProjectThumbnail project={project} />
+      </div>
+
       {/* Category + arrow */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-1.5">

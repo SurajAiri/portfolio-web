@@ -6,6 +6,7 @@ import {
   achievements,
 } from "@/data/personal";
 import JourneySection from "@/components/JourneySection";
+import CertificatesSection from "@/components/CertificatesSection";
 import Image from "next/image";
 import {
   Terminal,
@@ -222,6 +223,9 @@ export default function AboutPage() {
           </p>
         </div>
       </section>
+
+      {/* Certificates */}
+      <CertificatesSection />
 
       {/* Achievements */}
       <section className="mx-auto mt-16 max-w-5xl px-6">

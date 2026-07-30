@@ -39,7 +39,7 @@ export default function Footer() {
             href={personalInfo.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-white/25 transition-colors duration-200 hover:text-accent"
+            className="text-white/25 transition-all duration-200 hover:scale-110 hover:text-accent"
             aria-label="GitHub"
           >
             <Github size={18} />
@@ -48,7 +48,7 @@ export default function Footer() {
             href={personalInfo.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-white/25 transition-colors duration-200 hover:text-accent"
+            className="text-white/25 transition-all duration-200 hover:scale-110 hover:text-accent"
             aria-label="LinkedIn"
           >
             <Linkedin size={18} />

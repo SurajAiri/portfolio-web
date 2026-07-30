@@ -1,11 +1,7 @@
-import { getFeaturedProjects } from "@/data/projects";
+import { projects } from "@/data/projects";
 import Link from "next/link";
-import ProjectCard from "./ProjectCard";
+import ProjectTabs from "./ProjectTabs";
 import ProjectsInteractiveGrid from "./ProjectsInteractiveGrid";
-
-// Computed once at module load (build time for a static page) instead of
-// on every render.
-const featuredProjects = getFeaturedProjects();
 
 export default function FeaturedProjectsSection() {
   return (
@@ -32,12 +28,12 @@ export default function FeaturedProjectsSection() {
         </Link>
       </div>
 
-      {/* Project cards grid — server-rendered content, one small client
-          boundary for the click-to-open-dialog interaction */}
-      <ProjectsInteractiveGrid projects={featuredProjects}>
-        {featuredProjects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
+      {/* Tabbed subset — "overall" shows featured work, other tabs are
+          derived from data/projects.ts `homeTags` so the homepage doesn't
+          dump the entire catalog on the visitor at once. Click-to-open-dialog
+          interaction is a shared boundary around the tabs. */}
+      <ProjectsInteractiveGrid projects={projects}>
+        <ProjectTabs projects={projects} />
       </ProjectsInteractiveGrid>
     </section>
   );
