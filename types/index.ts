@@ -31,6 +31,16 @@ export interface Achievement {
   description: string;
 }
 
+// A single dated entry in the personal "journey" timeline shown on the
+// About page — broader than `Experience`/`education`, spans the whole
+// career arc (early hobby projects, internships, pivots, setbacks, etc).
+export interface JourneyMilestone {
+  period: string; // display label, e.g. "2024" or "Before 2022"
+  title: string;
+  description: string;
+  tag?: "milestone" | "setback"; // "setback" renders with a muted/dashed style instead of the accent
+}
+
 export interface SkillCategory {
   name: string;
   items: string[];

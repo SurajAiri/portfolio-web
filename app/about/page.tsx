@@ -5,6 +5,7 @@ import {
   education,
   achievements,
 } from "@/data/personal";
+import JourneySection from "@/components/JourneySection";
 import Image from "next/image";
 import {
   Terminal,
@@ -149,6 +150,9 @@ export default function AboutPage() {
           ))}
         </div>
       </section>
+
+      {/* Journey — full timeline, newest first */}
+      <JourneySection />
 
       {/* Experience */}
       <section className="mx-auto mt-20 max-w-5xl px-6">

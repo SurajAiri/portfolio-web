@@ -56,7 +56,7 @@ export const projects: Project[] = [
         type: "code",
       },
     ],
-    featured: false,
+    featured: true,
     isArchived: false,
     justFunProject: false,
     isMiniProject: false,

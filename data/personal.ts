@@ -3,6 +3,7 @@ import type {
   AboutSection,
   Experience,
   Achievement,
+  JourneyMilestone,
 } from "@/types";
 
 export const personalInfo: PersonalInfo = {
@@ -90,6 +91,58 @@ export const achievements: Achievement[] = [
     category: "Technical",
     description:
       "Attended and taught 10+ ML sessions at university; Multiple ML certifications.",
+  },
+];
+
+// Newest first — rendered top to bottom in JourneySection.
+export const journey: JourneyMilestone[] = [
+  {
+    period: "2026",
+    title: "Cooking up Something",
+    description:
+      "Currently working on a GenAI idea related to AI agent runtime platform & marketplace.",
+  },
+  {
+    period: "2026",
+    title: "Graduated B.E. in Computer Science",
+    description:
+      "Finishing my B.E. in Computer Science at Chandigarh University.",
+  },
+  {
+    period: "2025",
+    title: "Freelance GenAI",
+    description:
+      "Went full-time freelance building GenAI systems — automation workflows, RAG assistants, and agent platforms for clients.",
+  },
+  {
+    period: "2024",
+    title: "OrateMe",
+    description:
+      "Built and shipped OrateMe while learning AI and Generative AI in depth. The project ultimately failed, but it's where the shift into AI engineering really started.",
+    tag: "setback",
+  },
+  {
+    period: "2023",
+    title: "Two Paid Internships",
+    description:
+      "Worked as a Flutter developer across two paid internships, shipping cross-platform apps and API integrations.",
+  },
+  {
+    period: "2022",
+    title: "Joined Chandigarh University",
+    description: "Started my B.E. in Computer Science and Engineering.",
+  },
+  {
+    period: "Before 2022",
+    title: "Flutter & Freelancing",
+    description: "Picked up Flutter and started freelancing.",
+  },
+  {
+    period: "Before 2022",
+    title: "Android (Java) & Unity Games",
+    description:
+      "Where it all started — building Android apps in Java and games in Unity, before I knew what Git was. Most of it is lost with no records left.",
+    tag: "setback",
   },
 ];
 
