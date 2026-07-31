@@ -8,6 +8,7 @@ export type ProjectCategory =
   | "FRONTEND"
   | "BACKEND"
   | "DATA SCIENCE"
+  | "MOBILE APP"
   | "OTHER";
 export type ProductType =
   | "WEB APP"

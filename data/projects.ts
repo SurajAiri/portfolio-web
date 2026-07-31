@@ -249,6 +249,40 @@ export const projects: Project[] = [
       endDate: "2026-07-19",
       isCurrent: false,
     },
+    media: [
+      {
+        id: "sherlock-dashboard",
+        kind: "image",
+        role: "thumbnail",
+        src: "/projects/sherlock-candidate-identify/img-meeting-page.webp",
+        caption: "Meeting page",
+        order: 0,
+      },
+      {
+        id: "sherlock-architecture-diagram",
+        kind: "image",
+        role: "diagram",
+        src: "/projects/sherlock-candidate-identify/diagram.webp",
+        caption: "Architecture diagram",
+        order: 1,
+      },
+      {
+        id: "sherlock-demo",
+        kind: "image",
+        role: "demo",
+        src: "/projects/sherlock-candidate-identify/img-results-page.webp",
+        caption: "Result page",
+        order: 2,
+      },
+      {
+        id: "sherlock-scenarios",
+        kind: "image",
+        role: "demo",
+        src: "/projects/sherlock-candidate-identify/img-scenarios-list.webp",
+        caption: "Scenarios list",
+        order: 3,
+      },
+    ],
     links: [
       {
         label: "GitHub",
@@ -261,7 +295,6 @@ export const projects: Project[] = [
     justFunProject: false,
     isMiniProject: false,
   },
-
   {
     id: "merobot-ai-assistant",
     slug: "merobot",
@@ -315,6 +348,69 @@ export const projects: Project[] = [
     ],
     homeTags: ["agents"],
     featured: true,
+    isArchived: false,
+    justFunProject: false,
+    isMiniProject: false,
+  },
+  {
+    id: "reddy-flutter-reddit-client",
+    slug: "reddy",
+    title: "Reddy",
+    problem:
+      "Official Reddit clients are heavy, ad-laden, and offer little control over feed behavior, image quality, or session persistence; there was no lightweight, cross-platform Reddit client that handled infinite scroll, gallery posts, and search correctly while staying fast on mobile data.",
+    result:
+      "Built and shipped a cross-platform (Android/iOS/desktop/web) Flutter Reddit client with cookie-based auth, true infinite-scroll feeds, site-wide search with sort-by, and swipeable gallery posts; a later audit pass found and fixed 10+ concrete bugs including a broken pagination model that was losing already-loaded posts, a dropped session-cookie rotation bug, N+1 author-avatar requests on every feed load, and full-resolution image decoding that was inflating memory use well beyond what was ever rendered on screen.",
+    projectSummary:
+      "Mobile app for reddit post with enhanced UI/UX, infinite scroll.",
+    description: `Reddy is a self-built Reddit client written in Flutter, targeting Android, iOS, Windows, Linux, and web from a single codebase. Instead of Reddit's OAuth API, it authenticates via a WebView login flow and persists the resulting session cookies locally, which lets the app read a real logged-in feed without needing an approved API app. State management runs on GetX (\`RxList\`/\`Rx\` observables), with Hive used for structured local storage (search history) and \`SharedPreferences\` for auth session and settings.
+
+The app went through two build phases: an initial feature build (feed, subreddit browsing, search, comments, video/gallery playback), followed by a dedicated audit-and-fix pass that hunted down and resolved a set of real correctness and performance bugs that had shipped silently.
+
+**Key technical achievements include:**
+
+- **True infinite scroll, not "load more":** the original feed replaced its entire post list on every "next page" fetch, so scrolling further silently lost earlier posts. Rebuilt around a growing, de-duplicated \`RxList<RedditPostModel>\` in \`HomeController\`, a scroll listener that prefetches ~800px before the bottom, and a real \`SliverList.builder\` (swapped out from a non-lazy \`ListView\` nested in a \`CustomScrollView\`) for genuinely lazy rendering.
+- **Session persistence and re-authentication:** added an \`AuthController\` + \`RedditAuthService\` backed by \`SharedPreferences\` that reloads cookies before first frame, added a "Re-authenticate" flow that clears the cookie jar to support account switching, and centralized 401 handling so an expired session cleanly routes back to login instead of leaving the app broken.
+- **Gallery post rendering:** Reddit gallery posts (\`is_gallery\` + \`media_metadata\`/\`gallery_data\`) weren't parsed at all, falling back to a raw URL. Added parsing into an ordered \`galleryImages\` list and a swipeable \`PageView\` carousel with a "1/N" counter.
+- **Killed an N+1 request pattern:** every post in a feed page was firing an extra, un-awaited HTTP request for its author's profile during JSON parsing — 25 posts meant 25 extra requests before a single frame rendered, a common trigger for Reddit rate-limiting. Moved author avatar fetches to be lazy (triggered only when a post scrolls into view) and cached in-memory by username with in-flight de-duplication.
+- **Fixed silently-dropped cookie rotation:** the client was reading \`response.headers['Cookie']\` (a request header) instead of \`set-cookie\` (the actual response header), so Reddit's rotated session cookies were never being persisted — fixed and wired through \`AuthController.updateCookie\`.
+- **Memory-aware image decoding:** every image loaded via \`Image.network\` with no disk cache, and even after switching to \`cached_network_image\`, images were decoded at full source resolution regardless of display size (a 4000×3000 image shown in a 400px card decoded ~10x more pixels than were ever rendered). Set \`memCacheWidth\`/\`memCacheHeight\` based on actual on-screen size × device pixel ratio, and wrapped feed items in \`RepaintBoundary\` so scrolling no longer forces every post card to repaint together.
+- **Site-wide search with sort-by:** added a search mode that detects \`r/<subreddit>\` shorthand versus a general query, runs general queries against \`/search.json\` with the same infinite-scroll feed UI, and added a Best/Hot/New/Top/Rising sort menu — transparently remapping sort values Reddit doesn't actually support on certain endpoints (e.g. \`controversial\` isn't valid on \`/search.json\` and is mapped to \`top\`; \`best\` isn't a real per-subreddit listing and is mapped to \`hot\`).
+- **Removed a live security issue:** an unused, unrouted test screen was found to be posting raw session cookies to a public \`beeceptor.com\` webhook; deleted along with other logging that leaked cookies/response bodies to the console.
+
+The result is a Reddit client that behaves closer to reddit.com's own search/sort semantics than a naive wrapper, with feed scrolling, image memory, and session handling tuned for actual mobile constraints rather than desktop-first defaults.`,
+    category: ["MOBILE APP", "FRONTEND"],
+    tags: [
+      "Infinite Scroll Pagination",
+      "Cookie-Based Auth",
+      "GetX State Management",
+      "Reddit Gallery Parsing",
+      "Image Memory Optimization",
+      "N+1 Query Elimination",
+      "Site-Wide Search",
+    ],
+    techStack: [
+      "Flutter",
+      "Dart",
+      "GetX",
+      "Hive",
+      "SharedPreferences",
+      "WebView",
+      "cached_network_image",
+      "Reddit API",
+    ],
+    productType: ["MOBILE APP", "WEB APP"],
+    timeline: {
+      startDate: "2024-05-05",
+      endDate: "2026-07-30",
+    },
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/SurajAiri/reddy",
+        type: "code",
+      },
+    ],
+    featured: false,
     isArchived: false,
     justFunProject: false,
     isMiniProject: false,
