@@ -253,18 +253,18 @@ export const projects: Project[] = [
       {
         id: "sherlock-dashboard",
         kind: "image",
-        role: "thumbnail",
+        role: "demo",
         src: "/projects/sherlock-candidate-identify/img-meeting-page.webp",
         caption: "Meeting page",
-        order: 0,
+        order: 1,
       },
       {
         id: "sherlock-architecture-diagram",
         kind: "image",
-        role: "diagram",
+        role: "thumbnail",
         src: "/projects/sherlock-candidate-identify/diagram.webp",
         caption: "Architecture diagram",
-        order: 1,
+        order: 0,
       },
       {
         id: "sherlock-demo",

@@ -2,9 +2,22 @@
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import dynamic from "next/dynamic";
 import MermaidDiagram from "./MermaidDiagram";
+
+// react-syntax-highlighter (Prism build) is one of the heaviest packages in
+// this project. Pulling it — and its style table — into the eagerly-loaded
+// route chunk was adding real, measurable delay before the detail page
+// became interactive, even though most project descriptions don't contain
+// a single fenced code block. CodeBlock bundles the highlighter with the
+// style it needs and is fetched only once a code block actually needs to
+// render, client-side only (no SSR benefit for syntax highlighting).
+const CodeBlock = dynamic(() => import("./CodeBlock"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-24 animate-pulse rounded-lg bg-white/[0.03]" />
+  ),
+});
 
 // Renders a project's freeform `description` field as real markdown —
 // headings, lists, tables, links, inline code, fenced code blocks with
@@ -114,20 +127,7 @@ export default function ProjectMarkdown({ content }: { content: string }) {
                     {lang}
                   </div>
                 )}
-                <SyntaxHighlighter
-                  language={lang || "text"}
-                  style={oneDark}
-                  customStyle={{
-                    margin: 0,
-                    padding: "1rem",
-                    background: "#0f0f0f",
-                    fontSize: "0.8rem",
-                    lineHeight: 1.6,
-                  }}
-                  wrapLongLines
-                >
-                  {codeString}
-                </SyntaxHighlighter>
+                <CodeBlock code={codeString} language={lang} />
               </div>
             );
           },

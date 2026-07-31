@@ -46,9 +46,12 @@ export default async function ProjectDetailPage({
       <article className="mx-auto max-w-3xl px-6 pt-28 sm:pt-32">
         <ProjectBackNav />
 
-        {media.length > 0 && <ProjectGallery media={media} />}
-
-        <div className="mt-8">
+        {/* Title/meta renders first in the DOM so the page reads as
+            immediately "there" — category, title, and timeline are plain
+            text with nothing to wait on. The media gallery (which has an
+            image/video to fetch and decode) comes right after, rather than
+            gating everything above it. */}
+        <div className="mt-6">
           <div className="flex flex-wrap items-center gap-1.5">
             {project.category.map((item) => (
               <span
@@ -66,6 +69,8 @@ export default async function ProjectDetailPage({
             {formatProjectTimeline(project)} • {project.productType.join(" / ")}
           </p>
         </div>
+
+        {media.length > 0 && <ProjectGallery media={media} />}
 
         <div className="mt-10 space-y-4">
           <div>

@@ -19,16 +19,26 @@ function loomEmbedUrl(src: string) {
 }
 
 function MediaSlide({ item }: { item: MediaItem }) {
+  // Fades the image in once it's actually decoded, rather than having it pop
+  // in abruptly — the rest of the page (title, text) never waits on this,
+  // it's already rendered by the time the image arrives. Next/Image's onLoad
+  // fires for cache hits too (just near-instantly), so this never gets stuck.
+  const [loaded, setLoaded] = useState(false);
+
   switch (item.kind) {
     case "image":
       return (
         <Image
+          key={item.id}
           src={item.src}
           alt={item.caption ?? "Project media"}
           fill
           sizes="(max-width: 768px) 100vw, 700px"
-          className="object-contain"
+          className={`object-contain transition-opacity duration-300 ${
+            loaded ? "opacity-100" : "opacity-0"
+          }`}
           priority
+          onLoad={() => setLoaded(true)}
         />
       );
     case "gif":

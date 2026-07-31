@@ -3,7 +3,7 @@
 import { formatProjectTimeline, getSortedProjectLinks } from "@/data/projects";
 import type { Project } from "@/types";
 import { ArrowUpRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import ProjectThumbnail from "./ProjectThumbnail";
 import { saveProjectOrigin, type ProjectOrigin } from "@/lib/projectNav";
 
@@ -17,29 +17,17 @@ export default function ProjectCard({
   // landing on /projects.
   originContext: ProjectOrigin["from"];
 }) {
-  const router = useRouter();
   // Card is compact — show only the top 2 links by type priority
   // (demo > code > docs > case-study > article > other).
   const topLinks = getSortedProjectLinks(project).slice(0, 2);
 
-  const goToProject = () => {
-    saveProjectOrigin(originContext);
-    router.push(`/projects/${project.slug}`);
-  };
-
   return (
-    <div
+    <Link
+      href={`/projects/${project.slug}`}
       data-project-slug={project.slug}
-      role="button"
-      tabIndex={0}
-      onClick={goToProject}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          goToProject();
-        }
-      }}
-      className="group flex cursor-pointer flex-col overflow-hidden rounded-xl bg-white/3 p-6 pt-0 transition-all duration-300 hover:-translate-y-1 hover:bg-white/6 hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)]"
+      prefetch
+      onClick={() => saveProjectOrigin(originContext)}
+      className="group flex cursor-pointer flex-col overflow-hidden rounded-xl bg-white/3 p-6 pt-0 transition-all duration-300 hover:-translate-y-1 hover:bg-white/6 hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)] active:scale-[0.99] active:duration-75"
     >
       {/* Real project media when available, generated placeholder otherwise */}
       <div className="-mx-6 mb-5">
@@ -117,18 +105,23 @@ export default function ProjectCard({
           VIEW PROJECT &raquo;
         </span>
         {topLinks.map((link) => (
-          <a
+          <button
             key={link.label}
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
+            type="button"
+            onClick={(e) => {
+              // The card itself is now a <Link>, so this can't be a nested
+              // <a> (invalid HTML, unreliable clicks) — stop the link
+              // navigation and open the external URL ourselves instead.
+              e.preventDefault();
+              e.stopPropagation();
+              window.open(link.url, "_blank", "noopener,noreferrer");
+            }}
             className="relative z-10 inline-flex items-center gap-1 text-white/40 transition-colors duration-200 hover:text-accent"
           >
             {link.label.toUpperCase()} <ArrowUpRight size={12} />
-          </a>
+          </button>
         ))}
       </div>
-    </div>
+    </Link>
   );
 }
