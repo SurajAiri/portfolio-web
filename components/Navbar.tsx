@@ -1,5 +1,6 @@
 import Link from "next/link";
 import NavLink from "./NavLink";
+import ScrollProgress from "./motion/ScrollProgress";
 import { personalInfo } from "@/data/personal";
 
 const navLinks = [
@@ -10,7 +11,7 @@ const navLinks = [
 
 export default function Navbar() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/85 backdrop-blur-md">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
       <nav
         aria-label="Main"
         className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:px-6"
@@ -19,10 +20,19 @@ export default function Navbar() {
         <Link
           href="/"
           aria-label={`${personalInfo.name}, home`}
-          className="font-display text-base font-semibold tracking-tight"
+          className="group inline-flex items-center gap-2 font-display text-base font-semibold tracking-tight"
         >
+          <span
+            aria-hidden="true"
+            className="relative flex h-2 w-2 items-center justify-center"
+          >
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent/60" />
+            <span className="relative h-2 w-2 rounded-full bg-accent" />
+          </span>
           <span className="sm:hidden">SA</span>
-          <span className="hidden sm:inline">{personalInfo.name}</span>
+          <span className="hidden transition-colors duration-200 group-hover:text-accent sm:inline">
+            {personalInfo.name}
+          </span>
         </Link>
         <ul className="flex items-center">
           {navLinks.map((link) => (
@@ -32,6 +42,7 @@ export default function Navbar() {
           ))}
         </ul>
       </nav>
+      <ScrollProgress />
     </header>
   );
 }

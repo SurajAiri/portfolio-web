@@ -44,7 +44,7 @@ export default function CertificateLogoLoop() {
       </div>
 
       <div className="mx-auto mt-8 max-w-5xl px-6">
-        <div className="logo-loop-row overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+        <div className="logo-loop-row -my-3 overflow-hidden py-3 [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
           <div
             className="logo-loop-track flex w-max gap-4"
             style={{ animationDuration: `${duration}s` }}

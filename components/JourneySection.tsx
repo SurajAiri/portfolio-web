@@ -7,11 +7,31 @@ import { AnimatePresence, motion, useScroll, useTransform } from "motion/react";
 import { useRef, useState } from "react";
 import type { JourneyMilestone } from "@/types";
 
-function JourneyEntry({ entry }: { entry: JourneyMilestone }) {
+function JourneyEntry({
+  entry,
+  isLatest = false,
+}: {
+  entry: JourneyMilestone;
+  isLatest?: boolean;
+}) {
   const isSetback = entry.tag === "setback";
 
   return (
-    <li className="relative pb-9 pl-8 last:pb-0">
+    // Each entry slides in from the rail as it scrolls into view.
+    <motion.li
+      initial={{ opacity: 0, x: -14 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, amount: 0.4 }}
+      transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
+      className="relative pb-9 pl-8 last:pb-0"
+    >
+      {/* The newest milestone pulses so it reads as "now". */}
+      {isLatest && (
+        <span
+          aria-hidden="true"
+          className="absolute top-[9px] left-0 h-3 w-3 -translate-x-1/2 animate-ping rounded-full bg-accent/60"
+        />
+      )}
       {/* Dot on the rail. Setbacks are hollow so they read differently
           from milestones without needing a color the rail doesn't have. */}
       <span
@@ -30,7 +50,7 @@ function JourneyEntry({ entry }: { entry: JourneyMilestone }) {
       <p className="mt-1.5 max-w-[60ch] text-base leading-relaxed text-muted">
         {entry.description}
       </p>
-    </li>
+    </motion.li>
   );
 }
 
@@ -59,12 +79,16 @@ export default function JourneySection() {
       <div className="absolute top-0 bottom-0 left-0 w-px bg-border" />
       <motion.div
         style={{ scaleY: lineScale }}
-        className="absolute top-0 bottom-0 left-0 w-px origin-top bg-accent"
+        className="absolute top-0 bottom-0 left-0 w-px origin-top bg-accent shadow-[0_0_12px_rgba(79,217,160,0.7)]"
       />
 
       <ol>
-        {mainEntries.map((entry) => (
-          <JourneyEntry key={`${entry.period}-${entry.title}`} entry={entry} />
+        {mainEntries.map((entry, i) => (
+          <JourneyEntry
+            key={`${entry.period}-${entry.title}`}
+            entry={entry}
+            isLatest={i === 0}
+          />
         ))}
       </ol>
 

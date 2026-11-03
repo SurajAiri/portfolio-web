@@ -4,6 +4,8 @@
    Design tokens — every color on the site comes from here.
    Dark, with a deep conifer-ink base (not neutral black) so the mint accent
    sits in the same family instead of fighting a grey background.
+   --accent-2 is a cool sky blue used only as the second stop in gradients,
+   so mint stays the one "real" accent.
    --------------------------------------------------------------------------- */
 :root {
   --background: #0b1411;
@@ -14,6 +16,7 @@
   --card-hover: #15241f;
   --border: #223029;
   --accent: #4fd9a0;
+  --accent-2: #5cc8ff;
   --accent-ink: #052018; /* text on top of a filled accent button */
 }
 
@@ -26,6 +29,7 @@
   --color-card-hover: var(--card-hover);
   --color-border: var(--border);
   --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
   --color-accent-ink: var(--accent-ink);
   --font-display: var(--font-bricolage), system-ui, sans-serif;
   --font-sans: var(--font-instrument), system-ui, sans-serif;
@@ -43,6 +47,19 @@ body {
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.6;
+}
+
+/* Ambient light behind the whole site: two very soft washes that stay fixed
+   while the page scrolls over them. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60rem 36rem at 12% -8%, rgba(79, 217, 160, 0.1), transparent 60%),
+    radial-gradient(48rem 32rem at 100% 6%, rgba(92, 200, 255, 0.07), transparent 60%);
 }
 
 @layer base {
@@ -84,8 +101,10 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
-   The one entrance animation on the site: the hero rises into place on load.
-   Set --i on an element to stagger it.
+   Entrance animations (pure CSS, so server-rendered content is never hidden
+   waiting for JavaScript).
+   .rise     — a block fades up into place. Set --i to stagger it.
+   .word-in  — a headline word rises out of a blur. Set --i per word.
    --------------------------------------------------------------------------- */
 @keyframes rise {
   from {
@@ -100,6 +119,209 @@ body {
 .rise {
   animation: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
   animation-delay: calc(var(--i, 0) * 90ms);
+}
+
+@keyframes word-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.45em);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+.word-in {
+  display: inline-block;
+  animation: word-in 800ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 120ms);
+}
+
+/* ---------------------------------------------------------------------------
+   Graphics
+   --------------------------------------------------------------------------- */
+
+/* Faint engineering-paper grid. Always masked by the element using it. */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(233, 240, 236, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(233, 240, 236, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Slow-drifting blurred color blobs. Position and size come from utilities. */
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(4%, -6%, 0) scale(1.08);
+  }
+  66% {
+    transform: translate3d(-5%, 4%, 0) scale(0.96);
+  }
+}
+.aurora {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: 0.32;
+  animation: drift 22s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Gentle bobbing for floating chips. Set --float-delay to desync them. */
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.float-y {
+  animation: float-y 6s ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+}
+
+/* Mint → sky gradient text whose colors flow sideways in a seamless loop.
+   The gradient starts and ends on the same color, and the background moves
+   by exactly one image width (200% of the element) per cycle. */
+@keyframes text-flow {
+  to {
+    background-position: 200% 0;
+  }
+}
+.text-flow {
+  color: var(--accent);
+  background-image: linear-gradient(
+    90deg,
+    var(--accent),
+    var(--accent-2),
+    var(--accent)
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-flow 7s linear infinite;
+}
+
+/* Blinking terminal caret for the typed line in the hero. */
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+.caret {
+  display: inline-block;
+  width: 0.55ch;
+  height: 1.1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: var(--accent);
+  animation: blink 1.05s step-end infinite;
+}
+
+/* A light that travels around the portrait's border. The element needs a
+   little padding (the ring is the padding) and a radius. */
+@property --ring-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes ring-spin {
+  to {
+    --ring-angle: 360deg;
+  }
+}
+.conic-ring {
+  background: conic-gradient(
+    from var(--ring-angle),
+    rgba(79, 217, 160, 0.12),
+    var(--accent) 18%,
+    var(--accent-2) 32%,
+    rgba(79, 217, 160, 0.12) 52%,
+    rgba(79, 217, 160, 0.12)
+  );
+  animation: ring-spin 6s linear infinite;
+}
+
+/* ---------------------------------------------------------------------------
+   Interaction
+   --------------------------------------------------------------------------- */
+
+/* Cursor spotlight for cards. A pointer handler (lib/spotlight.ts) writes the
+   cursor position into --mx / --my; the card must be positioned (relative).
+   ::before is a soft light across the surface, ::after lights the border. */
+.spotlight::before,
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+.spotlight::before {
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(79, 217, 160, 0.11),
+    transparent 60%
+  );
+}
+.spotlight::after {
+  padding: 1px;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(79, 217, 160, 0.6),
+    transparent 65%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+.spotlight:hover::before,
+.spotlight:hover::after {
+  opacity: 1;
+}
+
+/* A light sweep across a button on hover. */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.38) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 700ms ease;
+}
+.btn-shine:hover::after {
+  transform: translateX(120%);
 }
 
 /* ---------------------------------------------------------------------------
@@ -155,10 +377,19 @@ body {
     scroll-behavior: auto;
   }
   .rise,
+  .word-in,
+  .aurora,
+  .float-y,
+  .text-flow,
+  .caret,
+  .conic-ring,
   .marquee-track,
   .marquee-track-reverse,
   .logo-loop-track {
     animation: none;
+  }
+  .btn-shine::after {
+    transition: none;
   }
   .marquee-row,
   .logo-loop-row {

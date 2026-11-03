@@ -7,6 +7,8 @@ import {
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import MotionProvider from "@/components/motion/MotionProvider";
+import CursorGlow from "@/components/motion/CursorGlow";
 import { personalInfo } from "@/data/personal";
 
 const siteUrl = "https://www.surajairi.com.np";
@@ -90,9 +92,12 @@ export default function RootLayout({
       <body
         className={`${display.variable} ${body.variable} ${mono.variable} antialiased`}
       >
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <MotionProvider>
+          <CursorGlow />
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </MotionProvider>
       </body>
     </html>
   );

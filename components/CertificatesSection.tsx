@@ -88,7 +88,7 @@ export default function CertificatesSection({
             {[rowA, rowB].map((row, rowIndex) => (
               <div
                 key={rowIndex}
-                className="marquee-row overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]"
+                className="marquee-row -my-3 overflow-hidden py-3 [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]"
               >
                 <div
                   className={`flex w-max gap-4 ${

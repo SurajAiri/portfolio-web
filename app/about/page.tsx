@@ -8,8 +8,9 @@ import {
 import { getAboutCertificates } from "@/data/certificates";
 import JourneySection from "@/components/JourneySection";
 import CertificatesSection from "@/components/CertificatesSection";
-import Image from "next/image";
-import type { ReactNode } from "react";
+import Portrait from "@/components/motion/Portrait";
+import Reveal from "@/components/motion/Reveal";
+import type { CSSProperties, ReactNode } from "react";
 
 // Lightweight inline markdown (**bold**, *italic*) for the about copy.
 function parseMarkdown(text: string) {
@@ -46,13 +47,18 @@ function Block({
 }) {
   return (
     <section className={`mx-auto max-w-5xl px-6 ${className}`}>
-      <div className="grid gap-6 border-t border-border pt-10 md:grid-cols-[220px_1fr] md:gap-12">
-        <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
-        <div>{children}</div>
-      </div>
+      <Reveal amount={0.1}>
+        <div className="grid gap-6 border-t border-border pt-10 md:grid-cols-[220px_1fr] md:gap-12">
+          <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+          <div>{children}</div>
+        </div>
+      </Reveal>
     </section>
   );
 }
+
+// Staggers the load-in animation defined in globals.css (.rise)
+const step = (i: number) => ({ "--i": i }) as CSSProperties;
 
 const textLink =
   "text-sm font-semibold underline decoration-accent decoration-2 underline-offset-4 transition-colors duration-200 hover:text-accent";
@@ -65,15 +71,21 @@ export default function AboutPage() {
       <section className="mx-auto max-w-5xl px-6 pt-28 pb-6 sm:pt-36">
         <div className="grid gap-8 md:grid-cols-[1fr_220px] md:gap-14">
           <div className="md:order-1">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+            <h1 className="rise text-4xl font-bold tracking-tight sm:text-6xl">
               About
             </h1>
-            <div className="mt-6 max-w-xl space-y-4 text-lg leading-relaxed text-foreground/85">
+            <div
+              className="rise mt-6 max-w-xl space-y-4 text-lg leading-relaxed text-foreground/85"
+              style={step(2)}
+            >
               {personalInfo.bio.map((paragraph, i) => (
                 <p key={i}>{paragraph}</p>
               ))}
             </div>
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <div
+              className="rise mt-8 flex flex-wrap items-center gap-x-6 gap-y-3"
+              style={step(3)}
+            >
               <a href={`mailto:${personalInfo.email}`} className={textLink}>
                 Email me
               </a>
@@ -103,15 +115,11 @@ export default function AboutPage() {
               </a>
             </div>
           </div>
-          <div className="md:order-2">
-            <Image
-              src="/profile.webp"
+          <div className="rise md:order-2" style={step(1)}>
+            <Portrait
               alt={personalInfo.name}
-              width={512}
-              height={512}
               sizes="(max-width: 768px) 80px, 220px"
               priority
-              className="h-20 w-20 rounded-2xl object-cover ring-1 ring-border md:h-auto md:w-full"
             />
           </div>
         </div>
@@ -196,10 +204,12 @@ export default function AboutPage() {
       </Block>
 
       <section className="mx-auto mt-20 max-w-5xl px-6">
-        <p className="max-w-2xl border-t border-border pt-10 font-display text-2xl leading-snug font-semibold tracking-tight">
-          Currently available for full-time roles and actively building AI and
-          product-focused projects.
-        </p>
+        <Reveal amount={0.3}>
+          <p className="max-w-2xl border-t border-border pt-10 font-display text-2xl leading-snug font-semibold tracking-tight">
+            Currently available for full-time roles and actively building AI
+            and product-focused projects.
+          </p>
+        </Reveal>
       </section>
     </div>
   );

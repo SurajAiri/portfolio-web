@@ -1,16 +1,41 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, type Variants } from "motion/react";
 import type { Project } from "@/types";
 import ProjectCard from "./ProjectCard";
 
 const MAX_VISIBLE = 6;
 const gridClass = "mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3";
 
+// Cards rise in one after another whenever the grid appears (on first scroll
+// into view, and again after switching tabs).
+const gridVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.03 } },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 24, scale: 0.98 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] },
+  },
+};
+
 function toLabel(tag: string) {
   if (tag === "overall") return "Featured";
   return tag.charAt(0).toUpperCase() + tag.slice(1);
+}
+
+function Cards({ list }: { list: Project[] }) {
+  return list.map((p) => (
+    <motion.div key={p.id} variants={cardVariants} className="h-full">
+      <ProjectCard project={p} originContext="home" />
+    </motion.div>
+  ));
 }
 
 export default function ProjectTabs({ projects }: { projects: Project[] }) {
@@ -34,14 +59,17 @@ export default function ProjectTabs({ projects }: { projects: Project[] }) {
     // No homeTags anywhere in the data — just render featured projects,
     // no point showing a single-option tab bar.
     return (
-      <div className={gridClass}>
-        {projects
-          .filter((p) => p.featured)
-          .slice(0, MAX_VISIBLE)
-          .map((p) => (
-            <ProjectCard key={p.id} project={p} originContext="home" />
-          ))}
-      </div>
+      <motion.div
+        className={gridClass}
+        variants={gridVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.05 }}
+      >
+        <Cards
+          list={projects.filter((p) => p.featured).slice(0, MAX_VISIBLE)}
+        />
+      </motion.div>
     );
   }
 
@@ -66,7 +94,12 @@ export default function ProjectTabs({ projects }: { projects: Project[] }) {
           >
             {toLabel(tab)}
             {active === tab && (
-              <span className="absolute inset-x-0 bottom-0 h-0.5 bg-accent" />
+              // Slides from the previous tab to this one.
+              <motion.span
+                layoutId="project-tab-underline"
+                className="absolute inset-x-0 bottom-0 h-0.5 bg-accent"
+                transition={{ type: "spring", stiffness: 400, damping: 34 }}
+              />
             )}
           </button>
         ))}
@@ -75,16 +108,15 @@ export default function ProjectTabs({ projects }: { projects: Project[] }) {
       <AnimatePresence mode="wait">
         <motion.div
           key={active}
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
+          variants={gridVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.05 }}
+          exit={{ opacity: 0, transition: { duration: 0.15 } }}
           className={gridClass}
         >
           {visible.length > 0 ? (
-            visible.map((p) => (
-              <ProjectCard key={p.id} project={p} originContext="home" />
-            ))
+            <Cards list={visible} />
           ) : (
             <p className="col-span-full py-8 text-muted">
               No projects in this group yet.
