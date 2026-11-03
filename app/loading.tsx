@@ -7,7 +7,7 @@ export default function Loading() {
           <div className="h-4 w-1/3 rounded bg-white/[0.04]" />
           <div className="h-24 rounded bg-white/[0.03]" />
         </div>
-        <div className="mx-auto h-52 w-52 rounded-full bg-white/[0.04] md:h-64 md:w-64" />
+        <div className="mx-auto h-52 w-52 rounded-2xl bg-white/[0.04] md:h-64 md:w-64" />
       </div>
     </div>
   );

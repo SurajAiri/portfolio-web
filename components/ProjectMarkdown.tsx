@@ -15,7 +15,7 @@ import MermaidDiagram from "./MermaidDiagram";
 const CodeBlock = dynamic(() => import("./CodeBlock"), {
   ssr: false,
   loading: () => (
-    <div className="h-24 animate-pulse rounded-lg bg-white/[0.03]" />
+    <div className="h-24 animate-pulse rounded-lg bg-foreground/[0.04]" />
   ),
 });
 
@@ -24,22 +24,22 @@ const CodeBlock = dynamic(() => import("./CodeBlock"), {
 // syntax highlighting, and ```mermaid fenced blocks as rendered diagrams.
 export default function ProjectMarkdown({ content }: { content: string }) {
   return (
-    <div className="project-markdown text-sm leading-relaxed text-foreground/80">
+    <div className="project-markdown max-w-[68ch] text-base leading-[1.7] text-foreground/85">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
           h1: ({ children }) => (
-            <h3 className="mt-6 mb-2 font-mono text-base font-semibold text-foreground first:mt-0">
+            <h3 className="mt-8 mb-2 font-display text-lg font-semibold tracking-tight text-foreground first:mt-0">
               {children}
             </h3>
           ),
           h2: ({ children }) => (
-            <h3 className="mt-6 mb-2 font-mono text-sm font-semibold tracking-wide text-foreground first:mt-0">
+            <h3 className="mt-8 mb-2 font-display text-lg font-semibold tracking-tight text-foreground first:mt-0">
               {children}
             </h3>
           ),
           h3: ({ children }) => (
-            <h4 className="mt-5 mb-2 font-mono text-sm font-semibold text-foreground/90 first:mt-0">
+            <h4 className="mt-6 mb-2 font-display text-base font-semibold tracking-tight text-foreground/90 first:mt-0">
               {children}
             </h4>
           ),
@@ -47,12 +47,12 @@ export default function ProjectMarkdown({ content }: { content: string }) {
             <p className="mb-3 leading-relaxed last:mb-0">{children}</p>
           ),
           ul: ({ children }) => (
-            <ul className="mb-3 ml-5 list-disc space-y-1.5 marker:text-accent/60">
+            <ul className="mb-3 ml-5 list-disc space-y-1.5 marker:text-faint">
               {children}
             </ul>
           ),
           ol: ({ children }) => (
-            <ol className="mb-3 ml-5 list-decimal space-y-1.5 marker:text-accent/60">
+            <ol className="mb-3 ml-5 list-decimal space-y-1.5 marker:text-faint">
               {children}
             </ol>
           ),
@@ -72,28 +72,28 @@ export default function ProjectMarkdown({ content }: { content: string }) {
           ),
           em: ({ children }) => <em className="text-foreground/90">{children}</em>,
           blockquote: ({ children }) => (
-            <blockquote className="my-3 border-l-2 border-accent/40 pl-4 text-foreground/60 italic">
+            <blockquote className="my-3 border-l-2 border-accent/40 pl-4 text-muted italic">
               {children}
             </blockquote>
           ),
-          hr: () => <hr className="my-6 border-white/6" />,
+          hr: () => <hr className="my-6 border-border" />,
           table: ({ children }) => (
-            <div className="my-4 overflow-x-auto rounded border border-white/6">
-              <table className="w-full border-collapse font-mono text-xs">
+            <div className="my-4 overflow-x-auto rounded border border-border">
+              <table className="w-full border-collapse text-sm">
                 {children}
               </table>
             </div>
           ),
           thead: ({ children }) => (
-            <thead className="bg-white/[0.04] text-muted">{children}</thead>
+            <thead className="bg-foreground/[0.04] text-muted">{children}</thead>
           ),
           th: ({ children }) => (
-            <th className="border-b border-white/6 px-3 py-2 text-left tracking-wider">
+            <th className="border-b border-border px-3 py-2 text-left font-medium">
               {children}
             </th>
           ),
           td: ({ children }) => (
-            <td className="border-b border-white/[0.03] px-3 py-2 text-foreground/70">
+            <td className="border-b border-border/60 px-3 py-2 text-foreground/80">
               {children}
             </td>
           ),
@@ -106,7 +106,7 @@ export default function ProjectMarkdown({ content }: { content: string }) {
             if (isInline) {
               return (
                 <code
-                  className="rounded bg-white/8 px-1.5 py-0.5 font-mono text-[0.85em] text-accent"
+                  className="rounded bg-foreground/[0.08] px-1.5 py-0.5 font-mono text-[0.85em] text-accent"
                   {...rest}
                 >
                   {children}
@@ -121,9 +121,9 @@ export default function ProjectMarkdown({ content }: { content: string }) {
             }
 
             return (
-              <div className="my-4 overflow-hidden rounded-lg border border-white/6">
+              <div className="my-4 overflow-hidden rounded-lg border border-border">
                 {lang && (
-                  <div className="border-b border-white/6 bg-white/[0.03] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-muted">
+                  <div className="border-b border-border bg-foreground/[0.03] px-3 py-1.5 font-mono text-xs text-muted">
                     {lang}
                   </div>
                 )}

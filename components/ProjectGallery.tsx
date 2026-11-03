@@ -106,7 +106,7 @@ function ThumbStrip({
       className={`relative aspect-video w-20 shrink-0 overflow-hidden rounded-md border transition-all duration-200 sm:w-24 ${
         active
           ? "border-accent opacity-100"
-          : "border-white/10 opacity-50 hover:opacity-80"
+          : "border-border opacity-60 hover:opacity-90"
       }`}
     >
       {staticSrc ? (
@@ -117,7 +117,7 @@ function ThumbStrip({
           className="h-full w-full object-cover"
         />
       ) : (
-        <div className="flex h-full w-full items-center justify-center bg-white/5 text-white/30">
+        <div className="flex h-full w-full items-center justify-center bg-foreground/5 text-faint">
           <Play size={14} />
         </div>
       )}
@@ -166,8 +166,8 @@ export default function ProjectGallery({ media }: { media: MediaItem[] }) {
   };
 
   return (
-    <div className="mt-8">
-      <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-white/[0.03]">
+    <div className="mt-10">
+      <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-card">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={current.id}
@@ -213,7 +213,7 @@ export default function ProjectGallery({ media }: { media: MediaItem[] }) {
                   aria-label={`Go to media ${i + 1}`}
                   onClick={() => goTo(i)}
                   className={`h-1.5 rounded-full transition-all duration-200 ${
-                    i === index ? "w-5 bg-accent" : "w-1.5 bg-white/30"
+                    i === index ? "w-5 bg-accent" : "w-1.5 bg-white/40"
                   }`}
                 />
               ))}
@@ -223,7 +223,7 @@ export default function ProjectGallery({ media }: { media: MediaItem[] }) {
       </div>
 
       {current.caption && (
-        <p className="mt-2 text-center font-mono text-xs text-white/40">
+        <p className="mt-3 text-center text-sm text-faint">
           {current.caption}
         </p>
       )}

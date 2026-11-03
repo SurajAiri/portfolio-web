@@ -36,16 +36,16 @@ export default function ProjectBackNav() {
     return (
       <Link
         href="/projects"
-        className="inline-flex items-center gap-1 font-mono text-xs tracking-wider text-white/40 transition-colors duration-200 hover:text-accent"
+        className="inline-flex items-center gap-1 text-sm font-medium text-muted transition-colors duration-200 hover:text-foreground"
       >
-        <ArrowLeft size={14} /> ALL PROJECTS
+        <ArrowLeft size={16} /> All projects
       </Link>
     );
   }
 
   const target = origin.from === "home" ? "/" : "/projects";
   const label =
-    origin.from === "home" ? "BACK TO PROJECTS" : "BACK TO ALL PROJECTS";
+    origin.from === "home" ? "Back to projects" : "Back to all projects";
 
   const handleBack = () => {
     armScrollRestore(target, origin.scrollY);
@@ -56,9 +56,9 @@ export default function ProjectBackNav() {
     <button
       type="button"
       onClick={handleBack}
-      className="inline-flex items-center gap-1 font-mono text-xs tracking-wider text-white/40 transition-colors duration-200 hover:text-accent"
+      className="inline-flex items-center gap-1 text-sm font-medium text-muted transition-colors duration-200 hover:text-foreground"
     >
-      <ArrowLeft size={14} /> {label}
+      <ArrowLeft size={16} /> {label}
     </button>
   );
 }

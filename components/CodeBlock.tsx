@@ -22,7 +22,7 @@ export default function CodeBlock({
       customStyle={{
         margin: 0,
         padding: "1rem",
-        background: "#0f0f0f",
+        background: "#0d1815",
         fontSize: "0.8rem",
         lineHeight: 1.6,
       }}

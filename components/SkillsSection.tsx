@@ -1,32 +1,31 @@
 import { skills } from "@/data/skills";
-import Reveal from "./motion/Reveal";
 
 export default function SkillsSection() {
   return (
-    <section className="bg-white/[0.02] py-20">
+    <section className="border-t border-border py-20">
       <div className="mx-auto max-w-5xl px-6">
-        <h2 className="text-center font-mono text-3xl font-bold tracking-tight sm:text-4xl">
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
           Skills
         </h2>
-        <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-          {skills.map((category, i) => (
-            <Reveal key={category.name} delay={i * 0.05}>
-              <h3 className="font-mono text-xs font-semibold tracking-[0.2em] text-muted">
-                {category.name.toUpperCase()}
-              </h3>
-              <div className="mt-3 flex flex-wrap gap-2">
+        {/* Grouping is shown by structure (a label column and a value
+            column), so the tools themselves can be plain readable text. */}
+        <dl className="mt-10 divide-y divide-border border-y border-border">
+          {skills.map((category) => (
+            <div
+              key={category.name}
+              className="grid gap-2 py-5 sm:grid-cols-[200px_1fr] sm:gap-8"
+            >
+              <dt className="text-sm font-medium text-muted sm:pt-0.5">
+                {category.name}
+              </dt>
+              <dd className="flex flex-wrap gap-x-6 gap-y-1.5 text-base">
                 {category.items.map((item) => (
-                  <span
-                    key={item}
-                    className="rounded bg-white/[0.06] px-3 py-1 font-mono text-xs text-foreground/70 transition-colors duration-200 hover:bg-accent/15 hover:text-accent"
-                  >
-                    {item}
-                  </span>
+                  <span key={item}>{item}</span>
                 ))}
-              </div>
-            </Reveal>
+              </dd>
+            </div>
           ))}
-        </div>
+        </dl>
       </div>
     </section>
   );

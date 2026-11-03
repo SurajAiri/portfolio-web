@@ -2,6 +2,7 @@ import { Bot, Boxes, Play, Radar, Terminal, Video, Wrench } from "lucide-react";
 import Image from "next/image";
 import type { Project } from "@/types";
 import { getSortedProjectMedia } from "@/data/projects";
+import { sentenceCase } from "@/lib/format";
 
 // Small deterministic hash so the same project always renders the same
 // placeholder pattern (no randomness -> no hydration mismatch).
@@ -48,7 +49,7 @@ function GeneratedPlaceholder({ project }: { project: Project }) {
 
   return (
     <div
-      className="relative aspect-[16/9] w-full overflow-hidden rounded-lg bg-white/[0.03]"
+      className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-foreground/[0.04]"
       aria-hidden="true"
     >
       <svg
@@ -83,8 +84,8 @@ function GeneratedPlaceholder({ project }: { project: Project }) {
             )}
           </pattern>
           <radialGradient id={`glow-${project.id}`} cx="50%" cy="40%" r="75%">
-            <stop offset="0%" stopColor="#22c55e" stopOpacity="0.16" />
-            <stop offset="100%" stopColor="#22c55e" stopOpacity="0" />
+            <stop offset="0%" stopColor="#4fd9a0" stopOpacity="0.16" />
+            <stop offset="100%" stopColor="#4fd9a0" stopOpacity="0" />
           </radialGradient>
         </defs>
         <rect width="400" height="225" fill={`url(#pat-${project.id})`} />
@@ -97,8 +98,8 @@ function GeneratedPlaceholder({ project }: { project: Project }) {
       </div>
 
       {/* Corner label so it's honest about being a placeholder, not a screenshot */}
-      <span className="absolute bottom-2 right-2 rounded bg-black/40 px-1.5 py-0.5 font-mono text-[9px] tracking-wider text-white/25">
-        {project.productType[0]}
+      <span className="absolute bottom-2 right-2 rounded bg-black/40 px-1.5 py-0.5 text-[11px] text-white/50">
+        {sentenceCase(project.productType[0])}
       </span>
     </div>
   );
@@ -132,7 +133,7 @@ export default function ProjectThumbnail({ project }: { project: Project }) {
     cover.kind === "video" || cover.kind === "youtube" || cover.kind === "loom";
 
   return (
-    <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg bg-white/[0.03]">
+    <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-foreground/[0.04]">
       {previewSrc ? (
         cover.kind === "gif" ? (
           // Gifs must stay unoptimized so the animation isn't flattened to one frame.
@@ -147,7 +148,7 @@ export default function ProjectThumbnail({ project }: { project: Project }) {
             src={previewSrc}
             alt={cover.caption ?? project.title}
             fill
-            sizes="(max-width: 768px) 100vw, 33vw"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           />
         )
@@ -164,8 +165,8 @@ export default function ProjectThumbnail({ project }: { project: Project }) {
       )}
 
       {media.length > 1 && (
-        <span className="absolute bottom-2 right-2 rounded bg-black/50 px-1.5 py-0.5 font-mono text-[9px] tracking-wider text-white/60">
-          +{media.length - 1} MORE
+        <span className="absolute bottom-2 right-2 rounded bg-black/60 px-1.5 py-0.5 text-[11px] text-white/80">
+          +{media.length - 1} more
         </span>
       )}
     </div>

@@ -6,9 +6,11 @@ import type { Project } from "@/types";
 import ProjectCard from "./ProjectCard";
 
 const MAX_VISIBLE = 6;
+const gridClass = "mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3";
 
 function toLabel(tag: string) {
-  return tag.toUpperCase();
+  if (tag === "overall") return "Featured";
+  return tag.charAt(0).toUpperCase() + tag.slice(1);
 }
 
 export default function ProjectTabs({ projects }: { projects: Project[] }) {
@@ -32,7 +34,7 @@ export default function ProjectTabs({ projects }: { projects: Project[] }) {
     // No homeTags anywhere in the data — just render featured projects,
     // no point showing a single-option tab bar.
     return (
-      <div className="mt-12 grid gap-6 lg:grid-cols-3">
+      <div className={gridClass}>
         {projects
           .filter((p) => p.featured)
           .slice(0, MAX_VISIBLE)
@@ -45,19 +47,27 @@ export default function ProjectTabs({ projects }: { projects: Project[] }) {
 
   return (
     <div>
-      {/* Tab bar */}
-      <div className="mt-10 flex flex-wrap gap-2">
+      <div
+        role="group"
+        aria-label="Filter projects"
+        className="mt-10 flex gap-6 border-b border-border"
+      >
         {tabs.map((tab) => (
           <button
             key={tab}
+            type="button"
             onClick={() => setActive(tab)}
-            className={`rounded-full px-4 py-1.5 font-mono text-xs tracking-wider transition-all duration-200 ${
+            aria-pressed={active === tab}
+            className={`relative -mb-px pb-3 text-sm font-medium transition-colors duration-200 ${
               active === tab
-                ? "bg-accent/15 text-accent"
-                : "bg-white/[0.04] text-muted hover:bg-white/[0.07] hover:text-foreground/70"
+                ? "text-foreground"
+                : "text-muted hover:text-foreground"
             }`}
           >
             {toLabel(tab)}
+            {active === tab && (
+              <span className="absolute inset-x-0 bottom-0 h-0.5 bg-accent" />
+            )}
           </button>
         ))}
       </div>
@@ -65,19 +75,19 @@ export default function ProjectTabs({ projects }: { projects: Project[] }) {
       <AnimatePresence mode="wait">
         <motion.div
           key={active}
-          initial={{ opacity: 0, y: 8 }}
+          initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.25, ease: "easeOut" }}
-          className="mt-8 grid gap-6 lg:grid-cols-3"
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+          className={gridClass}
         >
           {visible.length > 0 ? (
             visible.map((p) => (
               <ProjectCard key={p.id} project={p} originContext="home" />
             ))
           ) : (
-            <p className="col-span-full py-8 text-center font-mono text-sm text-muted">
-              Nothing tagged here yet.
+            <p className="col-span-full py-8 text-muted">
+              No projects in this group yet.
             </p>
           )}
         </motion.div>

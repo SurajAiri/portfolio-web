@@ -20,14 +20,14 @@ export default function MermaidDiagram({ chart }: { chart: string }) {
           startOnLoad: false,
           theme: "dark",
           themeVariables: {
-            background: "#0a0a0a",
-            primaryColor: "#0f0f0f",
-            primaryTextColor: "#ededed",
-            primaryBorderColor: "#22c55e",
-            lineColor: "#71717a",
-            secondaryColor: "#141414",
-            tertiaryColor: "#0f0f0f",
-            fontFamily: "var(--font-geist-mono), monospace",
+            background: "#0b1411",
+            primaryColor: "#101b17",
+            primaryTextColor: "#e9f0ec",
+            primaryBorderColor: "#4fd9a0",
+            lineColor: "#7f9088",
+            secondaryColor: "#15241f",
+            tertiaryColor: "#101b17",
+            fontFamily: "var(--font-instrument), system-ui, sans-serif",
             fontSize: "13px",
           },
           securityLevel: "strict",
@@ -53,7 +53,7 @@ export default function MermaidDiagram({ chart }: { chart: string }) {
 
   if (error) {
     return (
-      <div className="my-4 rounded border border-red-500/20 bg-red-500/5 px-4 py-3 font-mono text-xs text-red-400/80">
+      <div className="my-4 rounded border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-400/80">
         Diagram failed to render: {error}
       </div>
     );
@@ -62,11 +62,11 @@ export default function MermaidDiagram({ chart }: { chart: string }) {
   return (
     <div
       ref={ref}
-      className="mermaid-wrapper my-6 overflow-x-auto rounded-lg border border-white/6 bg-card/60 p-4"
+      className="mermaid-wrapper my-6 overflow-x-auto rounded-lg border border-border bg-card p-4"
       dangerouslySetInnerHTML={svg ? { __html: svg } : undefined}
     >
       {!svg && (
-        <div className="flex items-center justify-center py-8 font-mono text-xs text-muted">
+        <div className="flex items-center justify-center py-8 text-sm text-muted">
           Rendering diagram…
         </div>
       )}

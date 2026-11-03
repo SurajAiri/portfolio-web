@@ -9,6 +9,20 @@ import { notFound } from "next/navigation";
 import ProjectBackNav from "@/components/ProjectBackNav";
 import ProjectGallery from "@/components/ProjectGallery";
 import ProjectMarkdown from "@/components/ProjectMarkdown";
+import { ArrowUpRight } from "lucide-react";
+import { sentenceCase } from "@/lib/format";
+import type { ReactNode } from "react";
+
+function Section({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="mt-14">
+      <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+      <div className="mt-3">{children}</div>
+    </section>
+  );
+}
+
+const body = "max-w-[68ch] text-base leading-[1.7] text-foreground/85";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -42,134 +56,89 @@ export default async function ProjectDetailPage({
   const media = getSortedProjectMedia(project);
 
   return (
-    <div className="pb-20">
+    <div className="pb-24">
       <article className="mx-auto max-w-3xl px-6 pt-28 sm:pt-32">
         <ProjectBackNav />
 
-        {/* Title/meta renders first in the DOM so the page reads as
-            immediately "there" — category, title, and timeline are plain
-            text with nothing to wait on. The media gallery (which has an
-            image/video to fetch and decode) comes right after, rather than
-            gating everything above it. */}
-        <div className="mt-6">
-          <div className="flex flex-wrap items-center gap-1.5">
-            {project.category.map((item) => (
-              <span
-                key={item}
-                className="rounded-full border border-accent/40 bg-accent/10 px-2 py-0.5 font-mono text-[10px] tracking-wider text-accent"
-              >
-                {item}
-              </span>
-            ))}
+        {/* Title and meta render first in the DOM so the page reads as
+            immediately "there"; the media gallery (which has an image or
+            video to fetch) comes right after instead of gating the text. */}
+        <header className="mt-8">
+          <div className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-faint">
+            <span>{project.category.map(sentenceCase).join(", ")}</span>
+            <span>{formatProjectTimeline(project)}</span>
+            <span>{project.productType.map(sentenceCase).join(", ")}</span>
           </div>
-          <h1 className="mt-2 font-mono text-2xl font-bold tracking-tight text-accent sm:text-3xl">
-            {project.title.toUpperCase()}
+          <h1 className="mt-3 text-4xl leading-[1.05] font-bold tracking-tight sm:text-5xl">
+            {project.title}
           </h1>
-          <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/35">
-            {formatProjectTimeline(project)} • {project.productType.join(" / ")}
+          <p className="mt-5 max-w-[60ch] text-lg leading-relaxed text-muted">
+            {project.projectSummary}
           </p>
-        </div>
+
+          {allLinks.length > 0 && (
+            <div className="mt-7 flex flex-wrap gap-3">
+              {allLinks.map((link, i) => (
+                <a
+                  key={link.label}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-1.5 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors duration-200 ${
+                    i === 0
+                      ? "bg-accent text-accent-ink hover:bg-foreground"
+                      : "border border-border hover:border-foreground/40"
+                  }`}
+                >
+                  {link.label}
+                  <ArrowUpRight size={16} aria-hidden="true" />
+                </a>
+              ))}
+            </div>
+          )}
+        </header>
 
         {media.length > 0 && <ProjectGallery media={media} />}
 
-        <div className="mt-10 space-y-4">
-          <div>
-            <p className="leading-relaxed text-accent/80 font-semibold">
-              {project.projectSummary}
-            </p>
-          </div>
+        <Section title="The problem">
+          <p className={body}>{project.problem}</p>
+        </Section>
 
-          <div>
-            <h2 className="font-mono text-xs tracking-[0.2em] text-muted mb-2">
-              THE PROBLEM
-            </h2>
-            <p className="text-sm leading-relaxed text-foreground/80">
-              {project.problem}
-            </p>
-          </div>
+        <Section title="The result">
+          <p className={body}>{project.result}</p>
+        </Section>
 
-          <div>
-            <h2 className="font-mono text-xs tracking-[0.2em] text-muted mb-2">
-              THE RESULT
-            </h2>
-            <p className="text-sm leading-relaxed text-foreground/80">
-              {project.result}
-            </p>
-          </div>
+        <Section title="How it works">
+          <ProjectMarkdown content={project.description} />
+        </Section>
 
-          <div>
-            <h2 className="font-mono text-xs tracking-[0.2em] text-muted mb-2">
-              HOW IT WORKS
-            </h2>
-            <ProjectMarkdown content={project.description} />
-          </div>
-          <div>
-            <h2 className="font-mono text-xs tracking-[0.2em] text-muted mb-3">
-              TECH STACK
-            </h2>
-            <div className="flex flex-wrap gap-1.5">
-              {project.techStack.map((tech) => (
-                <span
-                  key={tech}
-                  className="rounded bg-white/6 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-white/50"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
+        <Section title="Tech stack">
+          <ul className="flex flex-wrap gap-2">
+            {project.techStack.map((tech) => (
+              <li
+                key={tech}
+                className="rounded-md border border-border bg-card px-2.5 py-1 text-sm text-foreground/85"
+              >
+                {tech}
+              </li>
+            ))}
+          </ul>
+        </Section>
 
-          <div>
-            <h2 className="font-mono text-xs tracking-[0.2em] text-muted mb-3">
-              TAGS
-            </h2>
-            <div className="flex flex-wrap gap-1.5">
+        {project.tags.length > 0 && (
+          <Section title="Tags">
+            <ul className="flex flex-wrap gap-2">
               {project.tags.map((tag) => (
-                <span
+                <li
                   key={tag}
-                  className="rounded bg-white/6 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-white/50"
+                  className="rounded-md border border-border px-2.5 py-1 text-sm text-muted"
                 >
                   {tag}
-                </span>
+                </li>
               ))}
-            </div>
-          </div>
-
-          {allLinks.length > 0 && (
-            <div>
-              <h2 className="font-mono text-xs tracking-[0.2em] text-muted mb-3">
-                LINKS
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {allLinks.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded border border-white/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-white/60 transition-colors hover:border-accent/40 hover:text-accent"
-                  >
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-white/6 pt-8 font-mono text-xs tracking-wider">
-          {allLinks.slice(0, 2).map((link) => (
-            <a
-              key={link.label}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-foreground transition-colors hover:text-accent"
-            >
-              {link.label} ↗
-            </a>
-          ))}
-        </div>
+            </ul>
+          </Section>
+        )}
       </article>
     </div>
   );

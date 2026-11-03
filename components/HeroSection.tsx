@@ -1,107 +1,106 @@
 import { personalInfo } from "@/data/personal";
 import Image from "next/image";
-import { Mail, FileText, Github, Package, Linkedin } from "lucide-react";
+import { FileText, Github, Linkedin, Mail, Package } from "lucide-react";
+import type { CSSProperties } from "react";
+
+// Staggers the load-in animation defined in globals.css (.rise)
+const step = (i: number) => ({ "--i": i }) as CSSProperties;
+
+const iconLink =
+  "rounded-lg p-2.5 text-muted transition-colors duration-200 hover:bg-card-hover hover:text-foreground";
 
 export default function HeroSection() {
   return (
-    <section className="mx-auto max-w-5xl px-6 pt-28 pb-20 sm:pt-32">
-      <div className="grid items-center gap-10 md:grid-cols-[1fr_280px]">
-        {/* Left — text + buttons */}
-        <div>
-          <h1 className="mt-4 font-mono text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-            {personalInfo.name.toUpperCase()}
-          </h1>
-          <p className="mt-2 flex items-center gap-1 text-base">
-            <span className="font-bold text-accent">
-              {personalInfo.primaryTitle}
+    <section className="mx-auto max-w-5xl px-6 pt-28 pb-20 sm:pt-36 sm:pb-28">
+      <div className="grid gap-8 md:grid-cols-[1fr_260px] md:items-end md:gap-14">
+        {/* Photo: a small avatar above the headline on mobile, a full
+            portrait beside it on desktop. */}
+        <div className="rise md:order-2" style={step(0)}>
+          <Image
+            src="/profile.webp"
+            alt={personalInfo.name}
+            width={512}
+            height={512}
+            sizes="(max-width: 768px) 80px, 260px"
+            priority
+            className="h-20 w-20 rounded-2xl object-cover ring-1 ring-border md:h-auto md:w-full"
+          />
+        </div>
+
+        <div className="md:order-1">
+          <p className="rise text-base text-muted" style={step(1)}>
+            <span className="font-medium text-foreground">
+              {personalInfo.name}
             </span>
-            <span className="text-white/30">+</span>
-            <span className="text-muted">{personalInfo.secondaryTitle}</span>
+            , {personalInfo.primaryTitle} and {personalInfo.secondaryTitle}{" "}
+            Developer
           </p>
 
-          {/* Bio with green left border */}
-          <div className="mt-6 space-y-4 border-l-2 border-accent pl-5">
-            {personalInfo.bio.map((paragraph, i) => (
-              <p
-                key={i}
-                className="font-mono text-sm leading-relaxed text-foreground/80"
-              >
-                {paragraph}
-              </p>
-            ))}
-          </div>
+          <h1
+            className="rise mt-5 text-5xl leading-[0.98] font-bold tracking-[-0.035em] sm:text-6xl md:text-7xl"
+            style={step(2)}
+          >
+            {personalInfo.headline}
+          </h1>
 
-          {/* Action buttons */}
-          <div className="mt-8 flex flex-wrap gap-3">
+          <p
+            className="rise mt-6 max-w-xl text-lg leading-relaxed text-foreground/80"
+            style={step(3)}
+          >
+            {personalInfo.bio[0]}
+          </p>
+
+          <div
+            className="rise mt-9 flex flex-wrap items-center gap-3"
+            style={step(4)}
+          >
             <a
               href={`mailto:${personalInfo.email}`}
-              className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-6 py-2.5 font-mono text-xs font-semibold tracking-wider text-foreground/80 transition-all duration-200 hover:bg-accent/20 hover:text-accent"
+              className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-accent-ink transition-colors duration-200 hover:bg-foreground"
             >
-              <Mail size={14} />
-              EMAIL ME
+              <Mail size={16} />
+              Email me
             </a>
             <a
               href={personalInfo.resumePath}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-6 py-2.5 font-mono text-xs font-semibold tracking-wider text-foreground/80 transition-all duration-200 hover:bg-accent/20 hover:text-accent"
+              className="inline-flex items-center gap-2 rounded-lg border border-border px-5 py-3 text-sm font-semibold transition-colors duration-200 hover:border-foreground/40"
             >
-              <FileText size={14} />
-              RESUME
+              <FileText size={16} />
+              Resume
             </a>
-            <a
-              href={personalInfo.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-6 py-2.5 font-mono text-xs font-semibold tracking-wider text-foreground/80 transition-all duration-200 hover:bg-accent/20 hover:text-accent"
-            >
-              <Linkedin size={14} />
-              LINKEDIN
-            </a>
-          </div>
-        </div>
-
-        {/* Right — profile photo + social icons */}
-        <div className="flex flex-col items-center gap-4 md:items-end">
-          <div className="relative h-52 w-52 md:h-64 md:w-64">
-            <div
-              className="absolute -inset-4 rounded-full bg-accent/15 blur-2xl"
-              aria-hidden="true"
-            />
-            <div className="relative h-full w-full overflow-hidden rounded-full bg-white/[0.04] ring-1 ring-accent/20">
-              <Image
-                src="/profile.webp"
-                alt={personalInfo.name}
-                width={256}
-                height={256}
-                sizes="(max-width: 768px) 208px, 256px"
-                className="h-full w-full object-cover"
-                loading="eager"
-              />
-            </div>
-          </div>
-          {/* Social icons */}
-          <div className="flex items-center gap-3">
-            <a
-              href={personalInfo.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full bg-white/[0.06] p-2.5 text-white/40 transition-all duration-200 hover:bg-accent/20 hover:text-accent"
-              aria-label="GitHub"
-            >
-              <Github size={18} />
-            </a>
-            {personalInfo.pypi && (
+            <div className="flex items-center sm:ml-2">
               <a
-                href={personalInfo.pypi}
+                href={personalInfo.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full bg-white/[0.06] p-2.5 text-white/40 transition-all duration-200 hover:bg-accent/20 hover:text-accent"
-                aria-label="PyPI"
+                aria-label="GitHub"
+                className={iconLink}
               >
-                <Package size={18} />
+                <Github size={20} />
               </a>
-            )}
+              <a
+                href={personalInfo.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className={iconLink}
+              >
+                <Linkedin size={20} />
+              </a>
+              {personalInfo.pypi && (
+                <a
+                  href={personalInfo.pypi}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="PyPI"
+                  className={iconLink}
+                >
+                  <Package size={20} />
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </div>

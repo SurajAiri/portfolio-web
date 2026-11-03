@@ -10,7 +10,7 @@ export const personalInfo: PersonalInfo = {
   name: "Suraj Kiran Airi",
   primaryTitle: "AI Engineer",
   secondaryTitle: "Backend",
-  headline: "I BUILD AI SYSTEMS THAT SOLVE REAL PROBLEMS.",
+  headline: "I build AI systems that solve real problems.",
   bio: [
     "I'm an engineer who turns complex AI ideas into working products — fast, reliable, and built for real use.",
     "I work at the intersection of AI, backend engineering, and product thinking, focusing on shipping useful systems rather than chasing hype.",
@@ -26,19 +26,19 @@ export const personalInfo: PersonalInfo = {
 export const aboutSections: AboutSection[] = [
   {
     icon: ">_",
-    title: "HOW I WORK",
+    title: "How I work",
     description:
       "I start from the problem and define success criteria first. Then I build the smallest useful version, measure what changes, and iterate toward a reliable production system.",
   },
   {
     icon: "⚙",
-    title: "WHERE I ADD VALUE",
+    title: "Where I add value",
     description:
       "End-to-end AI system development, fast MVP building, backend reliability, and real-time processing pipelines. I use the stack that best fits the problem, not the other way around.",
   },
   {
     icon: "🤖",
-    title: "HOW I USE AI FOR CODING",
+    title: "How I use AI for coding",
     description:
       "**For frontend:** I primarily use AI, then refine with AI. If AI isn't doing what I want, I dig into the code myself.\n **For backend and AI systems:** I first plan the architecture, test feasibility and working of each module separately in isolation (this helps me refine and deeply understand even unfamiliar parts), understand everything, then write a working version myself. I use AI to refine and optimize my existing code so it gets even better. \nDepending on module complexity, I skip some steps but the core principle stays: *understand first, build, then let AI sharpen the result.*",
   },

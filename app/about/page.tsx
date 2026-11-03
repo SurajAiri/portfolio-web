@@ -9,223 +9,170 @@ import { getAboutCertificates } from "@/data/certificates";
 import JourneySection from "@/components/JourneySection";
 import CertificatesSection from "@/components/CertificatesSection";
 import Image from "next/image";
-import {
-  Terminal,
-  Cog,
-  Bot,
-  Briefcase,
-  GraduationCap,
-  Trophy,
-  Github,
-  Linkedin,
-} from "lucide-react";
+import type { ReactNode } from "react";
 
-const sectionIcons: Record<string, React.ReactNode> = {
-  ">_": <Terminal size={20} />,
-  "⚙": <Cog size={20} />,
-  "🤖": <Bot size={20} />,
-};
+// Lightweight inline markdown (**bold**, *italic*) for the about copy.
+function parseMarkdown(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={i} className="font-semibold text-foreground">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    if (part.startsWith("*") && part.endsWith("*")) {
+      return (
+        <em key={i} className="text-foreground/90 italic">
+          {part.slice(1, -1)}
+        </em>
+      );
+    }
+    return part;
+  });
+}
+
+// Every block on this page uses the same two-column row: the heading sits
+// on the left, the content on the right, with a hairline above.
+function Block({
+  title,
+  children,
+  className = "mt-20",
+}: {
+  title: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <section className={`mx-auto max-w-5xl px-6 ${className}`}>
+      <div className="grid gap-6 border-t border-border pt-10 md:grid-cols-[220px_1fr] md:gap-12">
+        <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+        <div>{children}</div>
+      </div>
+    </section>
+  );
+}
+
+const textLink =
+  "text-sm font-semibold underline decoration-accent decoration-2 underline-offset-4 transition-colors duration-200 hover:text-accent";
 
 export default function AboutPage() {
   const aboutCertificates = getAboutCertificates();
 
-  function parseMarkdown(text: string) {
-    const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
-    return parts.map((part, i) => {
-      if (part.startsWith("**") && part.endsWith("**")) {
-        return (
-          <strong key={i} className="text-white font-semibold">
-            {part.slice(2, -2)}
-          </strong>
-        );
-      }
-      if (part.startsWith("*") && part.endsWith("*")) {
-        return (
-          <em key={i} className="italic">
-            {part.slice(1, -1)}
-          </em>
-        );
-      }
-      return part;
-    });
-  }
   return (
-    <div className="pb-20">
-      {/* Hero — same layout as home hero */}
-      <section className="mx-auto max-w-5xl px-6 pt-28 pb-20 sm:pt-32">
-        <div className="grid items-center gap-10 md:grid-cols-[1fr_280px]">
-          <div>
-            <p className="font-mono text-xs font-semibold tracking-[0.2em] text-accent">
-              ABOUT ME
-            </p>
-            <h1 className="mt-4 font-mono text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-              {personalInfo.name.toUpperCase()}
+    <div className="pb-24">
+      <section className="mx-auto max-w-5xl px-6 pt-28 pb-6 sm:pt-36">
+        <div className="grid gap-8 md:grid-cols-[1fr_220px] md:gap-14">
+          <div className="md:order-1">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+              About
             </h1>
-            <p className="mt-2 flex items-center gap-1 text-base">
-              <span className="font-bold text-accent">
-                {personalInfo.primaryTitle}
-              </span>
-              <span className="text-white/30">+</span>
-              <span className="text-muted">{personalInfo.secondaryTitle}</span>
-            </p>
-            <div className="mt-6 space-y-4 border-l-2 border-accent pl-5">
+            <div className="mt-6 max-w-xl space-y-4 text-lg leading-relaxed text-foreground/85">
               {personalInfo.bio.map((paragraph, i) => (
-                <p
-                  key={i}
-                  className="font-mono text-sm leading-relaxed text-foreground/80"
-                >
-                  {paragraph}
-                </p>
+                <p key={i}>{paragraph}</p>
               ))}
             </div>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href={`mailto:${personalInfo.email}`}
-                className="rounded-full bg-white/[0.06] px-6 py-2.5 font-mono text-xs font-semibold tracking-wider text-foreground/70 transition-all duration-200 hover:bg-accent/20 hover:text-accent"
-              >
-                EMAIL ME
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <a href={`mailto:${personalInfo.email}`} className={textLink}>
+                Email me
               </a>
               <a
                 href={personalInfo.resumePath}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full bg-white/[0.06] px-6 py-2.5 font-mono text-xs font-semibold tracking-wider text-foreground/70 transition-all duration-200 hover:bg-accent/20 hover:text-accent"
+                className={textLink}
               >
-                DOWNLOAD RESUME
+                Download resume
               </a>
-            </div>
-          </div>
-          <div className="flex flex-col items-center gap-4 md:items-end">
-            <div className="h-52 w-52 overflow-hidden rounded-full bg-white/[0.04] md:h-64 md:w-64">
-              <Image
-                src="/profile.webp"
-                alt={personalInfo.name}
-                width={256}
-                height={256}
-                className="h-full w-full object-cover"
-                priority
-              />
-            </div>
-            {/* Social icons */}
-            <div className="flex items-center gap-3">
               <a
                 href={personalInfo.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full bg-white/[0.06] p-2.5 text-white/40 transition-all duration-200 hover:bg-accent/20 hover:text-accent"
-                aria-label="LinkedIn"
+                className={textLink}
               >
-                <Linkedin size={18} />
+                LinkedIn
               </a>
               <a
                 href={personalInfo.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full bg-white/[0.06] p-2.5 text-white/40 transition-all duration-200 hover:bg-accent/20 hover:text-accent"
-                aria-label="GitHub"
+                className={textLink}
               >
-                <Github size={18} />
+                GitHub
               </a>
             </div>
+          </div>
+          <div className="md:order-2">
+            <Image
+              src="/profile.webp"
+              alt={personalInfo.name}
+              width={512}
+              height={512}
+              sizes="(max-width: 768px) 80px, 220px"
+              priority
+              className="h-20 w-20 rounded-2xl object-cover ring-1 ring-border md:h-auto md:w-full"
+            />
           </div>
         </div>
       </section>
 
-      {/* How I Work / Where I Add Value / AI Coding — stacked cards */}
-      <section className="mx-auto max-w-5xl px-6">
-        <div className="space-y-6">
-          {aboutSections.map((section) => (
-            <div
-              key={section.title}
-              className="rounded-xl bg-white/[0.03] p-8 transition-all duration-200 hover:bg-white/[0.05]"
-            >
-              <div className="flex items-center gap-3">
-                <span className="text-accent">
-                  {sectionIcons[section.icon] || section.icon}
-                </span>
-                <h2 className="font-mono text-lg font-bold tracking-[0.1em]">
-                  {section.title}
-                </h2>
-              </div>
-              <p className="mt-4 text-sm leading-relaxed text-muted whitespace-pre-line">
-                {parseMarkdown(section.description)}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+      {aboutSections.map((section, i) => (
+        <Block
+          key={section.title}
+          title={section.title}
+          className={i === 0 ? "mt-16" : "mt-12"}
+        >
+          <p className="max-w-[62ch] text-base leading-[1.7] whitespace-pre-line text-muted">
+            {parseMarkdown(section.description)}
+          </p>
+        </Block>
+      ))}
 
-      {/* Journey — full timeline, newest first */}
-      <JourneySection />
+      <Block title="Journey">
+        <JourneySection />
+      </Block>
 
-      {/* Experience */}
-      <section className="mx-auto mt-20 max-w-5xl px-6">
-        <div className="flex items-center gap-2">
-          <span className="text-accent">
-            <Briefcase size={18} />
-          </span>
-          <h2 className="font-mono text-lg font-bold tracking-[0.1em]">
-            EXPERIENCE
-          </h2>
-        </div>
-        <div className="mt-6 space-y-4">
+      <Block title="Experience">
+        <div className="space-y-10">
           {experience.map((exp) => (
             <div key={exp.company}>
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <div>
-                  <h3 className="text-base font-bold">{exp.role}</h3>
-                  <p className="text-sm text-muted">{exp.company}</p>
-                </div>
-                <p className="font-mono text-xs text-muted">{exp.duration}</p>
+              <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+                <h3 className="text-lg font-semibold tracking-tight">
+                  {exp.role}
+                </h3>
+                <p className="text-sm text-faint">{exp.duration}</p>
               </div>
-              <ul className="mt-3 space-y-1.5">
+              <p className="text-muted">
+                {exp.company}, {exp.location}
+              </p>
+              <ul className="mt-4 max-w-[62ch] list-disc space-y-2 pl-5 text-base leading-relaxed text-foreground/85 marker:text-faint">
                 {exp.points.map((point, i) => (
-                  <li
-                    key={i}
-                    className="flex gap-2 text-sm leading-relaxed text-foreground/70"
-                  >
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent/50" />
-                    {point}
-                  </li>
+                  <li key={i}>{point}</li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
-      </section>
+      </Block>
 
-      {/* Education */}
-      <section className="mx-auto mt-16 max-w-5xl px-6">
-        <div className="flex items-center gap-2">
-          <span className="text-accent">
-            <GraduationCap size={18} />
-          </span>
-          <h2 className="font-mono text-lg font-bold tracking-[0.1em]">
-            EDUCATION
-          </h2>
+      <Block title="Education">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+          <h3 className="text-lg font-semibold tracking-tight">
+            {education.degree}
+          </h3>
+          <p className="text-sm text-faint">{education.duration}</p>
         </div>
-        <div className="mt-6">
-          <div className="flex flex-wrap items-start justify-between gap-2">
-            <div>
-              <h3 className="text-base font-bold">{education.degree}</h3>
-              <p className="text-sm text-muted">
-                {education.university}, {education.location}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="font-mono text-xs text-muted">
-                {education.duration}
-              </p>
-              <p className="font-mono text-xs text-accent">
-                CGPA: {education.cgpa}
-              </p>
-            </div>
-          </div>
-          <p className="mt-3 font-mono text-sm text-muted">
-            Coursework: {education.coursework}
-          </p>
-        </div>
-      </section>
+        <p className="text-muted">
+          {education.university}, {education.location}
+        </p>
+        <p className="mt-4 text-base text-foreground/85">
+          CGPA {education.cgpa}
+        </p>
+        <p className="mt-1 text-base text-muted">
+          Coursework: {education.coursework}
+        </p>
+      </Block>
 
       {/* Certificates — hand-picked subset; full list lives on /certificates */}
       <CertificatesSection
@@ -233,30 +180,24 @@ export default function AboutPage() {
         viewAllHref="/certificates"
       />
 
-      {/* Achievements */}
-      <section className="mx-auto mt-16 max-w-5xl px-6">
-        <div className="flex items-center gap-2">
-          <span className="text-accent">
-            <Trophy size={18} />
-          </span>
-          <h2 className="font-mono text-lg font-bold tracking-[0.1em]">
-            ACHIEVEMENTS
-          </h2>
-        </div>
-        <div className="mt-6 space-y-4">
+      <Block title="Achievements">
+        <dl className="space-y-6">
           {achievements.map((ach) => (
             <div key={ach.category}>
-              <h3 className="font-mono text-xs font-semibold tracking-wider text-accent">
-                {ach.category.toUpperCase()}
-              </h3>
-              <p className="mt-1 font-mono text-sm leading-relaxed text-foreground/70">
+              <dt className="text-sm font-medium text-faint">
+                {ach.category}
+              </dt>
+              <dd className="mt-1 max-w-[62ch] text-base leading-relaxed text-foreground/85">
                 {ach.description}
-              </p>
+              </dd>
             </div>
           ))}
-        </div>
-        <p className="mt-12 font-mono text-sm text-foreground/70">
-          Currently available for full-time roles and actively building AI +
+        </dl>
+      </Block>
+
+      <section className="mx-auto mt-20 max-w-5xl px-6">
+        <p className="max-w-2xl border-t border-border pt-10 font-display text-2xl leading-snug font-semibold tracking-tight">
+          Currently available for full-time roles and actively building AI and
           product-focused projects.
         </p>
       </section>

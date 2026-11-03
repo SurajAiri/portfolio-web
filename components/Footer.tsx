@@ -1,59 +1,53 @@
 import { personalInfo } from "@/data/personal";
-import { Github, Linkedin } from "lucide-react";
+
+const linkClass =
+  "text-muted transition-colors duration-200 hover:text-foreground";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/[0.04] py-12 text-center">
-      <div className="mx-auto max-w-5xl px-6">
-        <p className="font-mono text-xs tracking-[0.15em] text-white/30">
+    <footer className="border-t border-border">
+      <div className="mx-auto flex max-w-5xl flex-col gap-6 px-6 py-10 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-faint">
           &copy; {new Date().getFullYear()} {personalInfo.name}. Built with
-          Next.js &amp; Tailwind.
+          Next.js and Tailwind.
         </p>
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-6 font-mono text-xs tracking-wider">
-          <a
-            href={`mailto:${personalInfo.email}`}
-            className="text-white/40 transition-colors duration-200 hover:text-accent"
-          >
-            EMAIL
-          </a>
-          <a
-            href={personalInfo.resumePath}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white/40 transition-colors duration-200 hover:text-accent"
-          >
-            RESUME
-          </a>
-          <a
-            href={personalInfo.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white/40 transition-colors duration-200 hover:text-accent"
-          >
-            LINKEDIN
-          </a>
-        </div>
-        {/* Social icons */}
-        <div className="mt-6 flex items-center justify-center gap-5">
-          <a
-            href={personalInfo.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white/25 transition-all duration-200 hover:scale-110 hover:text-accent"
-            aria-label="GitHub"
-          >
-            <Github size={18} />
-          </a>
-          <a
-            href={personalInfo.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white/25 transition-all duration-200 hover:scale-110 hover:text-accent"
-            aria-label="LinkedIn"
-          >
-            <Linkedin size={18} />
-          </a>
-        </div>
+        <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+          <li>
+            <a href={`mailto:${personalInfo.email}`} className={linkClass}>
+              Email
+            </a>
+          </li>
+          <li>
+            <a
+              href={personalInfo.resumePath}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkClass}
+            >
+              Resume
+            </a>
+          </li>
+          <li>
+            <a
+              href={personalInfo.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkClass}
+            >
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a
+              href={personalInfo.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkClass}
+            >
+              GitHub
+            </a>
+          </li>
+        </ul>
       </div>
     </footer>
   );

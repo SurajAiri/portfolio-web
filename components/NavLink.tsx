@@ -12,27 +12,25 @@ export default function NavLink({
   label: string;
 }) {
   const pathname = usePathname();
-  const isActive = href === "/" ? pathname === "/" : pathname.startsWith(href);
+  const isActive = pathname.startsWith(href);
 
   return (
     <Link
       href={href}
-      className="relative rounded-full px-5 py-1.5 text-sm font-medium"
+      aria-current={isActive ? "page" : undefined}
+      className={`relative flex h-14 items-center px-2.5 text-sm font-medium transition-colors duration-200 sm:px-4 ${
+        isActive ? "text-foreground" : "text-muted hover:text-foreground"
+      }`}
     >
+      {label}
       {isActive && (
+        // Sits on the header's bottom border and slides between links.
         <motion.span
-          layoutId="nav-active-pill"
-          className="absolute inset-0 rounded-full bg-white/10"
-          transition={{ type: "spring", stiffness: 400, damping: 32 }}
+          layoutId="nav-active-underline"
+          className="absolute inset-x-2.5 bottom-0 h-0.5 bg-accent sm:inset-x-4"
+          transition={{ type: "spring", stiffness: 400, damping: 34 }}
         />
       )}
-      <span
-        className={`relative z-10 transition-colors duration-200 ${
-          isActive ? "text-foreground" : "text-muted hover:text-accent"
-        }`}
-      >
-        {label}
-      </span>
     </Link>
   );
 }
